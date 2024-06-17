@@ -4,7 +4,6 @@ import { Col, Row, Typography } from 'antd';
 import UpdateProfileForm from './Partials/UpdateProfileForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import DeleteAccountForm from './Partials/DeleteAccountForm';
-import CancelSubscriptionForm from './Partials/CancelSubscriptionForm';
 
 const { Title, Text } = Typography;
 
@@ -18,9 +17,6 @@ function Edit() {
         </Col>
         <Col span={24} className='flex justify-center'>
           <UpdatePasswordForm />
-        </Col>
-        <Col span={24} className='flex justify-center'>
-          <CancelSubscriptionForm />
         </Col>
         <Col span={24} className='flex justify-center'>
           <DeleteAccountForm />

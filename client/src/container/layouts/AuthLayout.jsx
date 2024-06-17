@@ -9,7 +9,6 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import { ArrowLeftOutlined, ExclamationCircleFilled, FileAddOutlined, MoonFilled, PlusOutlined } from "@ant-design/icons";
 import ScrollToTop from "react-scroll-to-top";
-import PayModal from "../pages/Home/Partials/PayModal";
 
 import constants from "../../config/constants";
 import UserMenu from "./partials/UserMenu";
@@ -61,39 +60,6 @@ function AuthLayout({ children }) {
               </Link>
             </div>
             <div className="flex items-center">
-              <div>
-                <Link to="/home" className="mr-2 sm:mr-6">
-                  Home
-                </Link>
-              </div>
-              {/* <div className="mr-2 sm:mr-6">
-                <Button type="primary" icon={<FileAddOutlined />} onClick={() => {
-                  // return navigate('/home');
-                  if (user.activeSubscription && user.activeSubscription.status == 'active') {
-                    return navigate('/home');
-                  }
-                  if (user.activeSubscription && user.activeSubscription.status != 'active') {
-                    Modal.confirm({
-                      title: 'Your subscription past due.',
-                      icon: <ExclamationCircleFilled />,
-                      content: 'Will you continue it?',
-                      okText: "Yes",
-                      cancelText: "No",
-                      onOk() {
-                        window.open(user.activeSubscription.hosted_invoice, '_blank');
-                        return new Promise((resolve, reject) => {
-                          setTimeout(resolve, 1000);
-                        }).catch(() => console.log('Oops errors!'));
-                      },
-                      onCancel() {
-                        console.log('Cancel');
-                      },
-                    });
-                  } else {
-                    setOpenModal();
-                  }
-                }}>New Project</Button>
-              </div> */}
               <UserMenu />
             </div>
           </div>
@@ -109,15 +75,6 @@ function AuthLayout({ children }) {
         {/* <ScrollToTop smooth className="animate-bounce" /> */}
         {/* <FloatButton.BackTop /> */}
         <Settings />
-        <Elements stripe={stripePromise} nonce="random-nonce">
-          <PayModal
-            open={openPayModal}
-            setOpen={setOpenModal}
-            price={plans[0]?.price}
-            planId={plans[0]?._id}
-            setSuccessful={() => { }}
-          />
-        </Elements>
       </Layout>
     </>
   );

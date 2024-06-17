@@ -10,7 +10,7 @@ function AdminRoute() {
   const location = useLocation();
   const isAdmin = useSelector(state => state.auth.user.isAdmin);
 
-  return isAdmin ? <Outlet /> : <Navigate to='/home' />;
+  return isAdmin ? <Outlet /> : <Navigate to='/admin/users' />;
 }
 
 export default AdminRoute;
