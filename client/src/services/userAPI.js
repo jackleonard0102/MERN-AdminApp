@@ -40,3 +40,15 @@ export const deleteUser = async (userId) => {
     console.error('[DELETE user error]', error);
   }
 };
+
+export const createUser = async (formData) => {
+  try {
+    await postRequest('users', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  } catch (error) {
+    console.error('[CREATE user error]', error);
+  }
+};
