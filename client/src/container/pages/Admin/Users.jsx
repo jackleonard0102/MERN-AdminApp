@@ -4,7 +4,6 @@ import {
   Col,
   Row,
   Table,
-  Tag,
   Space,
   Pagination,
   Input,
@@ -16,27 +15,26 @@ import {
   Layout,
   Badge,
   Avatar,
+  Switch,
+  Select,
+  Upload
 } from "antd";
-import moment from "moment";
+import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import constants from "../../../config/constants";
 import { updatePageState } from "../../../redux/user/userSlice";
-
-import { getAllUsers } from "../../../services/userAPI";
+import { getAllUsers, updateUserStatus, updateUserDetails, deleteUser } from "../../../services/userAPI";
 import useForm from "../../../Hooks/useForm";
 
 const { Search } = Input;
 const { Content } = Layout;
+const { Option } = Select;
 
 function Users() {
-
   const dispatch = useDispatch();
-
   const pageState = useSelector(state => state.user);
 
-  const [showGiveModal, setShowGiveModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(pageState.page);
   const [total, setTotal] = useState(pageState.total);
@@ -45,6 +43,9 @@ function Users() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [formData, handleChange] = useForm({});
   const [form] = Form.useForm();
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState(null);
 
   const columns = [
     {
@@ -63,91 +64,30 @@ function Users() {
         <div className='ml-2'><b>{row.name}</b><br />{row.email}</div>
       </div>
     },
-    // {
-    //   title: "Plan",
-    //   dataIndex: "plan",
-    //   key: "plan",
-    //   render: (_, row) => {
-    //     if (row.plan) {
-    //       return (
-    //         <>
-    //         <Tooltip placement="top" title={"Property"}>
-    //           <Tag color="#108ee9">{_.property}</Tag>
-    //         </Tooltip>
-    //         <Tooltip placement="top" title={"Document"}>
-    //           <Tag color="#108ee9">{_.document}</Tag>
-    //         </Tooltip>
-    //         {/* <Tooltip placement="top" title={"Account"}>
-    //           <Tag color="#108ee9">{_.property}</Tag>
-    //         </Tooltip> */}
-    //         </>
-    //       );
-    //     }
-    //   },
-    // },
     {
-      title: "UTM Params",
-      dataIndex: "utm_source",
-      key: "utm_source",
-      render: (_, row) => <div>
-        <p className="m-0"><span className="font-bold">Source</span>: {_}</p>
-        <p className="m-0"><span className="font-bold">Medium</span>: {row.utm_medium}</p>
-        <p className="m-0"><span className="font-bold">Campaign</span>: {row.utm_campaign}</p>
-        <p className="m-0"><span className="font-bold">Content</span>: {row.utm_content}</p>
-      </div>
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      align: 'center',
+      render: (_, row) => <Switch checked={row.status === 1} onChange={() => handleStatusChange(row._id, row.status)} />
     },
     {
-      title: "Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (_) => {
-        return moment(_).format("MM/DD/YY hh:mm A");
-      },
+      title: "Permission",
+      dataIndex: "permission",
+      key: "permission",
+      align: 'center',
     },
-    // {
-    //   title: "Projects",
-    //   dataIndex: "projects",
-    //   key: "projects",
-    //   render: (_, row) => {
-    //     // console.log(_);
-    //     let isGenerating = _.reduce((accumulator, project) => accumulator + project.resultImages.filter(img => (img.status == 'pending' || img.status == 'processing')).length, 0);
-    //     return <Link to={`/projects/${row._id}`}>
-    //       <Badge status="success" count={isGenerating}>
-    //         <Button size="small">{_?.length || 0}/{_.reduce(
-    //           (accumulator, item) => accumulator + item.resultImages.length,
-    //           0,
-    //         )}</Button>
-    //       </Badge>
-    //     </Link>;
-    //   },
-    // },
-    // {
-    //   title: "Action",
-    //   key: "_id",
-    //   render: (_, row) => (
-    //     <Space size="middle">
-    //       <Button
-    //         type="primary"
-    //         size="small"
-    //         onClick={() => {
-    //           // if(row.activeSubscriptionId) {
-    //             setSelectedUser(row);
-    //             form.setFieldValue('property', row.plan?.property || 1);
-    //             form.setFieldValue('document', row.plan?.document || 1);
-    //             setShowGiveModal(true);
-    //           // } else {
-    //           //   message.warning("No active subscription.");
-    //           // }
-    //         }}
-    //       >
-    //         Give
-    //       </Button>
-    //       <Link to={`/admin/users/${row._id}/history`}>
-    //         <Button type="dashed" danger size="small">View</Button>
-    //       </Link>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Action",
+      key: "action",
+      align: 'center',
+      render: (_, row) => (
+        <Space size="middle">
+          <Button type="primary" size="small" onClick={() => showUpdateModal(row)}>Update</Button>
+          <Button type="dashed" danger size="small" onClick={() => showDeleteModal(row._id)}>Delete</Button>
+        </Space>
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -178,10 +118,61 @@ function Users() {
   };
 
   const onSearch = () => {
-    if (page == 1) {
+    if (page === 1) {
       getUsers(1);
     } else {
       setPage(1);
+    }
+  };
+
+  const handleStatusChange = async (userId, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    await updateUserStatus(userId, newStatus);
+    getUsers();
+  };
+
+  const showUpdateModal = (user) => {
+    setSelectedUser(user);
+    form.setFieldsValue({
+      avatar: user.avatar,
+      name: user.name,
+      email: user.email,
+      permission: user.permission
+    });
+    setIsUpdateModalVisible(true);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const values = await form.validateFields();
+      const formData = new FormData();
+      formData.append("avatar", values.avatar.file.originFileObj);
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("permission", values.permission);
+
+      await updateUserDetails(selectedUser._id, formData);
+      setIsUpdateModalVisible(false);
+      getUsers();
+      message.success("User updated successfully");
+    } catch (error) {
+      message.error("Failed to update user");
+    }
+  };
+
+  const showDeleteModal = (userId) => {
+    setDeletingUserId(userId);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteUser(deletingUserId);
+      setIsDeleteModalVisible(false);
+      getUsers();
+      message.success("User deleted successfully");
+    } catch (error) {
+      message.error("Failed to delete user");
     }
   };
 
@@ -247,44 +238,62 @@ function Users() {
           </div>
         </Col>
       </Row>
-      {/* <Modal
-        open={showGiveModal}
-        title="Increase plan"
-        okText="Submit"
+      <Modal
+        visible={isUpdateModalVisible}
+        title="Update User"
+        okText="Update"
         cancelText="Cancel"
-        onCancel={() => setShowGiveModal(false)}
-        onOk={() => {
-          
-        }}
-        okButtonProps={{ loading }}
+        onCancel={() => setIsUpdateModalVisible(false)}
+        onOk={handleUpdate}
       >
         <Form form={form} layout="vertical">
           <Form.Item
-            name="property"
-            label="Property"
-            rules={[
-              {
-                required: true,
-                message: "Please input the count of property",
-              },
-            ]}
+            name="avatar"
+            label="Avatar"
+            valuePropName="fileList"
+            getValueFromEvent={e => Array.isArray(e) ? e : e && e.fileList}
+            rules={[{ required: true, message: "Please upload an avatar" }]}
           >
-            <InputNumber className="w-full" size="large" min={1} />
+            <Upload name="avatar" listType="picture" beforeUpload={() => false}>
+              <Button icon={<UploadOutlined />}>Upload Avatar</Button>
+            </Upload>
           </Form.Item>
           <Form.Item
-            name="document"
-            label="Document"
-            rules={[
-              {
-                required: true,
-                message: "Please input the count of document",
-              },
-            ]}
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please input the name" }]}
           >
-            <InputNumber className="w-full" size="large" min={1} />
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Please input the email" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="permission"
+            label="Permission"
+            rules={[{ required: true, message: "Please select the permission" }]}
+          >
+            <Select>
+              <Option value="admin">Admin</Option>
+              <Option value="user">User</Option>
+            </Select>
           </Form.Item>
         </Form>
-      </Modal> */}
+      </Modal>
+      <Modal
+        visible={isDeleteModalVisible}
+        title="Confirm Delete"
+        okText="Yes"
+        cancelText="No"
+        onCancel={() => setIsDeleteModalVisible(false)}
+        onOk={handleDelete}
+      >
+        <p>Are you sure you want to delete this user?</p>
+      </Modal>
     </Content>
   );
 }

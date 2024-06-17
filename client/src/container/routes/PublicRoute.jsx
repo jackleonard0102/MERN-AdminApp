@@ -14,7 +14,7 @@ function PublicRoute() {
       return <Navigate to="/admin/users" />;
     }
     // return <Navigate to={flag ? '/home' : '/home'} />;
-    return <Navigate to= '/home' />;
+    return <Navigate to= '/dashboard' />;
   }
   return <Outlet />;
 }
