@@ -4,7 +4,6 @@ const initialState = {
   isAuthenticated: false,
   loader: false,
   user: {},
-  plan: {},
   errors: {},
 };
 

@@ -11,7 +11,6 @@ function Home() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const plan = useSelector((state) => state.auth.plan);
   const { id } = useParams();
 
   return (
