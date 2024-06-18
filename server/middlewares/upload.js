@@ -1,3 +1,4 @@
+// upload.js
 const fs = require('fs');
 const multer = require('multer');
 
@@ -31,4 +32,4 @@ const upload = multer({
     },
 });
 
-module.exports = upload.single('file');
+module.exports = upload;

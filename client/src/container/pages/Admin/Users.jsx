@@ -1,3 +1,4 @@
+// Users.jsx
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -9,7 +10,6 @@ import {
   Input,
   Modal,
   Form,
-  InputNumber,
   Tooltip,
   message,
   Layout,
@@ -22,7 +22,6 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import constants from "../../../config/constants";
 import { updatePageState } from "../../../redux/user/userSlice";
 import { getStorage } from "../../../helpers";
@@ -33,7 +32,6 @@ import {
   deleteUser,
   createUser,
 } from "../../../services/userAPI";
-import useForm from "../../../Hooks/useForm";
 import ImgCrop from "antd-img-crop";
 
 const { Search } = Input;
@@ -128,11 +126,7 @@ function Users() {
           >
             Update
           </Button>
-          <Button
-            danger
-            size="small"
-            onClick={() => showDeleteModal(row._id)}
-          >
+          <Button danger size="small" onClick={() => showDeleteModal(row._id)}>
             Delete
           </Button>
         </Space>
@@ -178,19 +172,42 @@ function Users() {
 
   const handleStatusChange = async (userId, currentStatus) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
-    await updateUserStatus(userId, newStatus);
+    await updateUserStatus(userId, { status: newStatus });
     getUsers();
   };
 
+  const handleCreate = async () => {
+    try {
+      const values = await createForm.validateFields();
+      const formData = new FormData();
+      if (values.avatar && values.avatar.file) {
+        formData.append("avatar", values.avatar.file.originFileObj);
+      }
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("permission", values.permission);
+  
+      await createUser(formData);
+      setIsCreateModalVisible(false);
+      getUsers();
+      message.success("User created successfully");
+    } catch (error) {
+      message.error("Failed to create user");
+    }
+  };
+  
   const handleUpdate = async () => {
     try {
       const values = await form.validateFields();
       const formData = new FormData();
-      formData.append("avatar", values.avatar.file.originFileObj);
+      if (values.avatar && values.avatar.file) {
+        formData.append("avatar", values.avatar.file.originFileObj);
+      }
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("permission", values.permission);
-
+  
       await updateUserDetails(selectedUser._id, formData);
       setIsUpdateModalVisible(false);
       getUsers();
@@ -199,39 +216,25 @@ function Users() {
       message.error("Failed to update user");
     }
   };
-
+  
   const showDeleteModal = (userId) => {
-    setDeletingUserId(userId);
-    setIsDeleteModalVisible(true);
+    Modal.confirm({
+      title: 'Are you sure you want to delete this user?',
+      content: 'This action cannot be undone.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: () => handleDelete(userId),
+    });
   };
-
-  const handleDelete = async () => {
+  
+  const handleDelete = async (userId) => {
     try {
-      await deleteUser(deletingUserId);
-      setIsDeleteModalVisible(false);
+      await deleteUser(userId);
       getUsers();
       message.success("User deleted successfully");
     } catch (error) {
       message.error("Failed to delete user");
-    }
-  };
-
-  const handleCreate = async () => {
-    try {
-      const values = await createForm.validateFields();
-      const formData = new FormData();
-      formData.append("avatar", values.avatar.file.originFileObj);
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
-      formData.append("permission", values.permission);
-
-      await createUser(formData);
-      setIsCreateModalVisible(false);
-      getUsers();
-      message.success("User created successfully");
-    } catch (error) {
-      message.error("Failed to create user");
     }
   };
 
@@ -400,7 +403,7 @@ function Users() {
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
-            rules={[{ required: true, message: "Please upload an avatar" }]}
+            rules={[{ required: false }]} // Change to required false
           >
             <ImgCrop rotationSlider>
               <Upload
