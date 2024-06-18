@@ -50,8 +50,6 @@ function Users() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [form] = Form.useForm();
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [deletingUserId, setDeletingUserId] = useState(null);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [createForm] = Form.useForm();
   const [imageUrl, setImageUrl] = useState(null);
@@ -112,6 +110,7 @@ function Users() {
       dataIndex: "permission",
       key: "permission",
       align: "center",
+      render: (permission) => (permission === 1 ? "Admin" : "User"),
     },
     {
       title: "Action",
@@ -145,7 +144,7 @@ function Users() {
       limit: pageSize,
     }).then((data) => {
       setLoading(false);
-      setUsers(data.users.map((user) => ({ ...user, key: user._id })));
+      setUsers(data.users.filter((user) => user.status !== 2).map((user) => ({ ...user, key: user._id })));
       setTotal(data.total);
       dispatch(
         updatePageState({
@@ -186,7 +185,7 @@ function Users() {
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("password", values.password);
-      formData.append("permission", values.permission);
+      formData.append("permission", values.permission === "admin" ? 1 : 2);
 
       await createUser(formData);
       setIsCreateModalVisible(false);
@@ -206,7 +205,7 @@ function Users() {
       }
       formData.append("name", values.name);
       formData.append("email", values.email);
-      formData.append("permission", values.permission);
+      formData.append("permission", values.permission === "admin" ? 1 : 2);
 
       await updateUserDetails(selectedUser._id, formData);
       setIsUpdateModalVisible(false);
@@ -270,11 +269,12 @@ function Users() {
       avatar: user.avatar,
       name: user.name,
       email: user.email,
-      permission: user.permission,
+      permission: user.permission === 1 ? "admin" : "user",
     });
     setImageUrl(user.avatar); // Set the initial avatar URL
     setIsUpdateModalVisible(true);
   };
+
 
   return (
     <Content className="mx-auto p-2 px-5 my-5">

@@ -29,27 +29,72 @@ exports.getUsers = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password, permission } = req.body;
-    const user = new User({ name, email, password, permission, avatar: req.file?.path });
+    let permissionValue;
+
+    // Check permission value and assign accordingly
+    if (permission === 'admin') {
+      permissionValue = 1;
+    } else if (permission === 'user') {
+      permissionValue = 2;
+    } else {
+      return res.status(400).json({ success: false, message: 'Invalid permission value' });
+    }
+
+    // Create new user instance with the mapped permission value
+    const user = new User ({
+      name,
+      email,
+      password,
+      permission: permissionValue,
+      avatar: req.file?.path
+    });
+
+    // Save user to the database
     await user.save();
     return res.status(201).json({ success: true, message: 'User created successfully' });
   } catch (error) {
-    _error(error);
+    console.error(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 exports.updateUserDetails = async (req, res) => {
   try {
     const { userId } = req.params;
     const updateData = { ...req.body };
-    if (req.file) updateData.avatar = req.file.path.replace(/\\/g, '/').replace('public/', '/');
+
+    // Map permission field if present
+    if (updateData.permission) {
+      const permission = updateData.permission.toLowerCase();
+      if (permission === 'admin') {
+        updateData.permission = 1;
+      } else if (permission === 'user') {
+        updateData.permission = 2;
+      } else {
+        return res.status(400).json({ success: false, message: 'Invalid permission value' });
+      }
+    }
+
+    // Update avatar path if file is present
+    if (req.file) {
+      updateData.avatar = req.file.path.replace(/\\/g, '/').replace('public/', '/');
+    }
+
+    // Update user details in the database
     const user = await User.findByIdAndUpdate(userId, updateData, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
     return res.status(200).json({ success: true, user });
   } catch (error) {
-    _error(error);
+    console.error(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 exports.updateUserStatus = async (req, res) => {
   try {
