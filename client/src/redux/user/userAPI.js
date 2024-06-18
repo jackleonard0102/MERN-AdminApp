@@ -1,6 +1,4 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { getAllPlans } from '../../services/planAPI';
-
 
 // function* getPlansAPI(action) {
 //   try {

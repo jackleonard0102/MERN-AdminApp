@@ -13,7 +13,6 @@ import ScrollToTop from "react-scroll-to-top";
 import constants from "../../config/constants";
 import UserMenu from "./partials/UserMenu";
 import { setDarkMode, setOpenPayModal } from "../../redux/app/appSlice";
-import { getPlans } from "../../redux/plan/planSlice";
 
 import LogoSrc from "../../assets/images/logo.png";
 import smLogoSrc from "../../assets/images/logo-sm.png";
@@ -21,22 +20,12 @@ import Settings from "./partials/Settings";
 
 const { Header } = Layout;
 
-const stripePromise = loadStripe(constants.stripePK);
-
 function AuthLayout({ children }) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDarkMode = useSelector(state => state.app.isDarkMode);
-  const openPayModal = useSelector(state => state.app.openPayModal);
-  const user = useSelector(state => state.auth.user);
-  const plans = useSelector(state => state.plan.plans ?? []);
 
-  useEffect(() => {
-    if (plans.length === 0) {
-      dispatch(getPlans());
-    }
-  }, [])
 
   const changeTheme = () => {
     dispatch(setDarkMode());

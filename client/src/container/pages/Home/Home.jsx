@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Image, Layout, Row, Typography } from "antd";
-import { getPlan } from "../../../redux/auth/authSlice";
 import { setStorage } from "../../../helpers";
 
 const { Content, Sider } = Layout;
@@ -14,10 +13,6 @@ function Home() {
   const navigate = useNavigate();
   const plan = useSelector((state) => state.auth.plan);
   const { id } = useParams();
-
-  useEffect(() => {
-    dispatch(getPlan());
-  }, []);
 
   return (
     <Content className="text-center max-w-7xl mx-auto p-2 my-5">

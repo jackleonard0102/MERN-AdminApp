@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import constants from "../../../config/constants";
 import { updatePageState } from "../../../redux/user/userSlice";
-import { getStorage } from '../../../helpers';
+import { getStorage } from "../../../helpers";
 import {
   getAllUsers,
   updateUserStatus,
@@ -129,7 +129,6 @@ function Users() {
             Update
           </Button>
           <Button
-            type="dashed"
             danger
             size="small"
             onClick={() => showDeleteModal(row._id)}
@@ -278,18 +277,10 @@ function Users() {
     <Content className="mx-auto p-2 px-5 my-5">
       <Row gutter={[16, 16]} justify="end">
         <Col sm={12} md={8} lg={6} xl={4}>
-          <Search
-            placeholder="Name..."
-            allowClear
-            onSearch={onSearch}
-          />
+          <Search placeholder="Name..." allowClear onSearch={onSearch} />
         </Col>
         <Col sm={12} md={8} lg={6} xl={4}>
-          <Search
-            placeholder="Email..."
-            allowClear
-            onSearch={onSearch}
-          />
+          <Search placeholder="Email..." allowClear onSearch={onSearch} />
         </Col>
         <Col flex="auto" />
         <Col>
@@ -344,7 +335,9 @@ function Users() {
                   Authorization: getStorage("token"),
                 }}
                 beforeUpload={beforeUpload}
-                onChange={(info) => handleFileChange(info, setImageUrl, setLoading)}
+                onChange={(info) =>
+                  handleFileChange(info, setImageUrl, setLoading)
+                }
               >
                 {loading ? (
                   <Spin />
@@ -422,7 +415,9 @@ function Users() {
                   Authorization: getStorage("token"),
                 }}
                 beforeUpload={beforeUpload}
-                onChange={(info) => handleFileChange(info, setImageUrl, setLoading)}
+                onChange={(info) =>
+                  handleFileChange(info, setImageUrl, setLoading)
+                }
               >
                 {loading ? (
                   <Spin />
