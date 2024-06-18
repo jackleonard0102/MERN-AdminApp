@@ -187,7 +187,7 @@ function Users() {
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("permission", values.permission);
-  
+
       await createUser(formData);
       setIsCreateModalVisible(false);
       getUsers();
@@ -196,7 +196,7 @@ function Users() {
       message.error("Failed to create user");
     }
   };
-  
+
   const handleUpdate = async () => {
     try {
       const values = await form.validateFields();
@@ -207,7 +207,7 @@ function Users() {
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("permission", values.permission);
-  
+
       await updateUserDetails(selectedUser._id, formData);
       setIsUpdateModalVisible(false);
       getUsers();
@@ -216,18 +216,18 @@ function Users() {
       message.error("Failed to update user");
     }
   };
-  
+
   const showDeleteModal = (userId) => {
     Modal.confirm({
-      title: 'Are you sure you want to delete this user?',
-      content: 'This action cannot be undone.',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
+      title: "Are you sure you want to delete this user?",
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
       onOk: () => handleDelete(userId),
     });
   };
-  
+
   const handleDelete = async (userId) => {
     try {
       await deleteUser(userId);
@@ -310,85 +310,7 @@ function Users() {
           </div>
         </Col>
       </Row>
-      <Modal
-        visible={isUpdateModalVisible}
-        title="Update User"
-        okText="Update"
-        cancelText="Cancel"
-        onCancel={() => setIsUpdateModalVisible(false)}
-        onOk={handleUpdate}
-      >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="avatar"
-            label="Avatar"
-            valuePropName="file"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
-          >
-            <ImgCrop rotationSlider>
-              <Upload
-                name="file"
-                listType="picture-circle"
-                className="avatar-uploader"
-                multiple={false}
-                showUploadList={false}
-                action={`${constants.HOST_URL}users/upload`}
-                accept="image/*"
-                headers={{
-                  Authorization: getStorage("token"),
-                }}
-                beforeUpload={beforeUpload}
-                onChange={(info) =>
-                  handleFileChange(info, setImageUrl, setLoading)
-                }
-              >
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <div className="relative">
-                    <img
-                      src={
-                        imageUrl
-                          ? `${constants.SOCKET_URL}${imageUrl}`
-                          : "/imgs/avatar.png"
-                      }
-                      alt="avatar"
-                      className="w-full rounded-full"
-                    />
-                    <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
-                      Change
-                    </div>
-                  </div>
-                )}
-              </Upload>
-            </ImgCrop>
-          </Form.Item>
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please enter the name" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[{ required: true, message: "Please enter the email" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="permission"
-            label="Permission"
-            rules={[{ required: true, message: "Please select a permission" }]}
-          >
-            <Select placeholder="Select permission">
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
+
       <Modal
         visible={isCreateModalVisible}
         title="Create New User"
@@ -463,6 +385,86 @@ function Users() {
             rules={[{ required: true, message: "Please enter the password" }]}
           >
             <Input.Password />
+          </Form.Item>
+          <Form.Item
+            name="permission"
+            label="Permission"
+            rules={[{ required: true, message: "Please select a permission" }]}
+          >
+            <Select placeholder="Select permission">
+              <Option value="admin">Admin</Option>
+              <Option value="user">User</Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        visible={isUpdateModalVisible}
+        title="Update User"
+        okText="Update"
+        cancelText="Cancel"
+        onCancel={() => setIsUpdateModalVisible(false)}
+        onOk={handleUpdate}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="avatar"
+            label="Avatar"
+            valuePropName="file"
+            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
+          >
+            <ImgCrop rotationSlider>
+              <Upload
+                name="file"
+                listType="picture-circle"
+                className="avatar-uploader"
+                multiple={false}
+                showUploadList={false}
+                action={`${constants.HOST_URL}users/upload`}
+                accept="image/*"
+                headers={{
+                  Authorization: getStorage("token"),
+                }}
+                beforeUpload={beforeUpload}
+                onChange={(info) =>
+                  handleFileChange(info, setImageUrl, setLoading)
+                }
+              >
+                {loading ? (
+                  <Spin />
+                ) : (
+                  <div className="relative">
+                    <img
+                      src={
+                        imageUrl
+                          ? `${constants.SOCKET_URL}${imageUrl}`
+                          : "/imgs/avatar.png"
+                      }
+                      alt="avatar"
+                      className="w-full rounded-full"
+                    />
+                    <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
+                      Change
+                    </div>
+                  </div>
+                )}
+              </Upload>
+            </ImgCrop>
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please enter the name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Please enter the email" }]}
+          >
+            <Input />
           </Form.Item>
           <Form.Item
             name="permission"

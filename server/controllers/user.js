@@ -12,8 +12,6 @@ exports.getUsers = async (req, res) => {
     const where = {};
     if (name) where.name = new RegExp(name, "i");
     if (email) where.email = new RegExp(email, "i");
-    if (utm_source) where.utm_source = new RegExp(utm_source, "i");
-    if (utm_campaign) where.utm_campaign = new RegExp(utm_campaign, "i");
 
     const total = await User.countDocuments(where);
     const users = await User.find(where)

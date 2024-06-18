@@ -10,7 +10,6 @@ const { scheduleJob } = require("node-schedule");
 const dayjs = require("dayjs");
 const config = require("./config");
 const socketIO = require("./socket");
-const webhook = require("./controllers/webhook");
 const api = require("./routes");
 const UserModel = require("./models/userModel");
 const { _log, _error } = require("./utils/logging");
@@ -31,12 +30,6 @@ app.set("view engine", "ejs");
 
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
-
-app.post(
-  "/stripe/webhook",
-  express.raw({ type: "application/json" }),
-  webhook.index
-);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

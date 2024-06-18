@@ -10,14 +10,14 @@ const router = express.Router();
 router.post("/updateProfile", userController.updateProfile);
 router.post("/updatePassword", userController.updatePassword);
 router.post("/deleteAccount", userController.deleteAccount);
-router.post("/upload", upload.single('avatar'), userController.upload);
+router.post("/upload", upload, userController.upload);
 router.get('/me', userController.getUser);
 
 router.get("/", checkRoles([ROLES.ADMIN]), userController.getUsers);
 
 // New routes for create, update, delete user
-router.post("/", upload.single('avatar'), userController.createUser);
-router.put("/:userId", upload.single('avatar'), userController.updateUserDetails);
+router.post("/", upload, userController.createUser);
+router.put("/:userId", upload, userController.updateUserDetails);
 router.put("/:userId/status", userController.updateUserStatus);
 router.delete("/:userId", userController.deleteUser);
 

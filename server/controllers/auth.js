@@ -10,7 +10,6 @@ const { generateToken, sendEmail, verifyToken, sendNotification } = require("../
 exports.register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        const { utm_source, utm_capmaign, utm_medium, utm_content } = req.query;
 
         const escapedEmail = email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -36,10 +35,6 @@ exports.register = async (req, res) => {
             name,
             email,
             password,
-            utm_source,
-            utm_capmaign,
-            utm_medium,
-            utm_content,
         });
 
         await user.save();
