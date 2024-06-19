@@ -17,6 +17,11 @@ const routes = [
     exact: true,
   },
   {
+    path: 'new-entry/business',
+    component: lazy(() => import('../pages/Home/Entry/Business')),
+    exact: true,
+  },
+  {
     path: 'user/profile',
     component: lazy(() => import('../pages/Profile/Edit')),
     exact: true,
