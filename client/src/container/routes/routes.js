@@ -22,6 +22,21 @@ const routes = [
     exact: true,
   },
   {
+    path: 'recommendations/business',
+    component: lazy(() => import('../pages/Home/Recommendation/Business')),
+    exact: true,
+  },
+  {
+    path: 'recommendations/personal',
+    component: lazy(() => import('../pages/Home/Recommendation/Personal')),
+    exact: true,
+  },
+  {
+    path: 'recommendations/general',
+    component: lazy(() => import('../pages/Home/Recommendation/General')),
+    exact: true,
+  },
+  {
     path: 'user/profile',
     component: lazy(() => import('../pages/Profile/Edit')),
     exact: true,
