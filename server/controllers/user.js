@@ -32,9 +32,9 @@ exports.createUser = async (req, res) => {
     let permissionValue;
 
     // Check permission value and assign accordingly
-    if (permission === 'admin') {
+    if (permission === 'Admin') {
       permissionValue = 1;
-    } else if (permission === 'user') {
+    } else if (permission === 'User') {
       permissionValue = 2;
     } else {
       return res.status(400).json({ success: false, message: 'Invalid permission value' });
@@ -67,9 +67,9 @@ exports.updateUserDetails = async (req, res) => {
     // Map permission field if present
     if (updateData.permission) {
       const permission = updateData.permission.toLowerCase();
-      if (permission === 'admin') {
+      if (permission === 'Admin') {
         updateData.permission = 1;
-      } else if (permission === 'user') {
+      } else if (permission === 'User') {
         updateData.permission = 2;
       } else {
         return res.status(400).json({ success: false, message: 'Invalid permission value' });
