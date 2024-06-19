@@ -1,19 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Layout, Menu, Dropdown } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Add useLocation
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import {
-  ArrowLeftOutlined,
-  ExclamationCircleFilled,
-  FileAddOutlined,
-  MoonFilled,
-  PlusOutlined,
-  DownOutlined,
-  MenuOutlined,
-} from "@ant-design/icons";
+import { DownOutlined, MenuOutlined } from "@ant-design/icons";
 import UserMenu from "./partials/UserMenu";
-import { setDarkMode, setOpenPayModal } from "../../redux/app/appSlice";
+import { setDarkMode } from "../../redux/app/appSlice";
 import LogoSrc from "../../assets/images/logo.png";
 import smLogoSrc from "../../assets/images/logo-sm.png";
 import Settings from "./partials/Settings";
@@ -49,6 +41,11 @@ function AuthLayout({ children }) {
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.app.isDarkMode);
   const [menuVisible, setMenuVisible] = useState(false);
+  const location = useLocation(); // Add useLocation
+
+  useEffect(() => {
+    setMenuVisible(false); // Reset menu visibility on route change
+  }, [location.pathname]); // Dependency on location.pathname
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -81,11 +78,7 @@ function AuthLayout({ children }) {
               </Link>
             </div>
             <div className="flex items-center sm:hidden">
-              <Button
-                type="text"
-                icon={<MenuOutlined />}
-                onClick={toggleMenu}
-              />
+              <Button type="text" icon={<MenuOutlined />} onClick={toggleMenu} />
             </div>
             <div
               className={classNames("flex items-center space-x-4", {
@@ -106,21 +99,21 @@ function AuthLayout({ children }) {
                 <Menu.Item
                   key="dashboard"
                   className="hover:bg-transparent"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   <Link to="/dashboard">Dashboard</Link>
                 </Menu.Item>
                 <Menu.Item
                   key="search"
                   className="hover:bg-transparent"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   <Link to="/search">Search</Link>
                 </Menu.Item>
                 <Menu.Item
                   key="new-entry"
                   className="hover:bg-transparent"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   <Dropdown
                     overlay={newEntryMenu}
@@ -137,7 +130,7 @@ function AuthLayout({ children }) {
                 <Menu.Item
                   key="recommendations"
                   className="hover:bg-transparent"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   <Dropdown
                     overlay={recommendationsMenu}
@@ -154,7 +147,7 @@ function AuthLayout({ children }) {
                 <Menu.Item
                   key="reports"
                   className="hover:bg-transparent"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   <Link to="/reports">Reports</Link>
                 </Menu.Item>

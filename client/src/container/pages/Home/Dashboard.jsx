@@ -13,7 +13,7 @@ function Dashboard() {
   const { id } = useParams();
 
   return (
-    <Content className="text-center max-w-7xl mx-auto p-2 my-5">
+    <Content className="text-center max-w-7xl w-full mx-auto p-2 my-5">
       <Row>
         <Col span={24}>
           <Title level={2} className="my-5">
