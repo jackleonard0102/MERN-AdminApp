@@ -37,6 +37,11 @@ const routes = [
     exact: true,
   },
   {
+    path: 'reports',
+    component: lazy(() => import('../pages/Home/Report')),
+    exact: true,
+  },
+  {
     path: 'user/profile',
     component: lazy(() => import('../pages/Profile/Edit')),
     exact: true,
