@@ -200,9 +200,7 @@ exports.getUser = async (req, res) => {
       email: req.user.email,
       name: req.user.name,
       avatar: req.user.avatar,
-      stripeId: req.user.stripeId,
       isAdmin: req.user.permission === 1,
-      pm_last_four: req.user.pm_last_four,
     };
     return res.json({ success: true, user });
   } catch (error) {

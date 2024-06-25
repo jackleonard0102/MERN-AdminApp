@@ -1,5 +1,5 @@
 // Users.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Button,
   Col,
@@ -10,7 +10,6 @@ import {
   Input,
   Modal,
   Form,
-  Tooltip,
   message,
   Layout,
   Badge,
@@ -20,7 +19,6 @@ import {
   Upload,
   Spin,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import constants from "../../../config/constants";
 import { updatePageState } from "../../../redux/user/userSlice";
@@ -133,28 +131,45 @@ function Users() {
     },
   ];
 
+  const getUsers = useCallback(
+    (current) => {
+      setLoading(true);
+      getAllUsers({
+        page: current || page,
+        limit: pageSize,
+      })
+        .then((data) => {
+          setLoading(false);
+          if (data.users) {
+            setUsers(
+              data.users
+                .filter((user) => user.status !== 2)
+                .map((user) => ({ ...user, key: user._id }))
+            );
+            setTotal(data.total);
+            dispatch(
+              updatePageState({
+                total: data.total,
+                page,
+                pageSize,
+              })
+            );
+          } else {
+            console.error("No users found in response:", data); // Add this line
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.error("Error fetching users:", error);
+          message.error("Failed to fetch users"); // Display an error message to the user
+        });
+    },
+    [dispatch, page, pageSize]
+  );
+
   useEffect(() => {
     getUsers();
-  }, [page, pageSize]);
-
-  const getUsers = (current) => {
-    setLoading(true);
-    getAllUsers({
-      page: current || page,
-      limit: pageSize,
-    }).then((data) => {
-      setLoading(false);
-      setUsers(data.users.filter((user) => user.status !== 2).map((user) => ({ ...user, key: user._id })));
-      setTotal(data.total);
-      dispatch(
-        updatePageState({
-          total: data.total,
-          page,
-          pageSize,
-        })
-      );
-    });
-  };
+  }, [getUsers, page, pageSize]);
 
   const handlePageChange = (pageNumber, pageSize) => {
     setPage(pageNumber);
@@ -274,7 +289,6 @@ function Users() {
     setImageUrl(user.avatar); // Set the initial avatar URL
     setIsUpdateModalVisible(true);
   };
-
 
   return (
     <Content className="mx-auto p-2 px-5 my-5">
