@@ -26,7 +26,7 @@ exports.delFile = async (filePath) => {
   }
 };
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+// sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.sendEmail = async ({ to, from, subject, text, html, data, reply_to }) => {
   let emailTemplate = await ejs.renderFile(path.join(__dirname, `../views/${html}.ejs`), data);

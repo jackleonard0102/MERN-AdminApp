@@ -30,11 +30,6 @@ const UserMenu = () => {
           key: '/user/profile',
           icon: <IdcardOutlined />,
         },
-        // {
-        //   label: 'Plans',
-        //   key: '/plans',
-        //   icon: <UnorderedListOutlined />,
-        // },
       ]
     },
     {
@@ -48,11 +43,6 @@ const UserMenu = () => {
           key: '/admin/users',
           icon: <UserOutlined />,
         },
-        // {
-        //   label: 'Analyze',
-        //   key: '/admin/analyze',
-        //   icon: <AreaChartOutlined />,
-        // },
       ]
     },
     {
@@ -80,7 +70,6 @@ const UserMenu = () => {
       placement="bottomLeft"
       arrow
     >
-      {/* <Button type='primary' size='large' icon={<UserOutlined />}>{user.name}</Button> */}
       <Avatar src={user.avatar ? `${constants.SOCKET_URL}${user.avatar}` : '/imgs/avatar.png'} className='shadow-lg cursor-pointer' />
     </Dropdown>
   )

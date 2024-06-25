@@ -46,11 +46,6 @@ export const SocketProvider = ({ children }) => {
         console.log("Socket Error:", err.message);
       });
 
-      socket.current.on('SUBSCRIPTION_EVENT', (data) => {
-        // message.warning(data.message, 5);
-        console.log('SUBSCRIPTION_EVENT');
-        dispatch(getUser());
-      });
 
       socket.current.on('NOTIFICATION_EVENT', (data) => {
         // message.warning(data.message, 5);

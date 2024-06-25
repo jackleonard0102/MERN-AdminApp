@@ -1,67 +1,55 @@
+// axiosClient.js
 import axios from "axios";
 import constants from "../config/constants";
 import { getStorage } from "../helpers";
 
-const axiosClient = axios.create();
-
-axiosClient.defaults.baseURL = constants.HOST_URL;
-
-axiosClient.defaults.headers = {
+const axiosClient = axios.create({
+  baseURL: constants.HOST_URL,
+  headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-};
-
-// To share cookies to cross site domain, change to true.
-// axiosClient.defaults.withCredentials = true;
-
-// if(token) {
-axiosClient.interceptors.request.use(function (config) {
-    const token = getStorage("token");
-    config.headers.Authorization = token;
-    return config;
+  },
 });
-// axiosClient.defaults.headers.common['Authorization'] = `${token}`;
-// } else {
-// delete axiosClient.defaults.headers.common['Authorization'];
-// }
 
-export function getRequest(URL, params) {
-    return axiosClient.get(`/${URL}`, { params }).then((response) => response);
-}
+axiosClient.interceptors.request.use((config) => {
+  const token = getStorage("token");
+  if (token) {
+    config.headers.Authorization = token;
+  }
+  return config;
+});
 
-export function postRequest(URL, payload) {
-    return axiosClient.post(`/${URL}`, payload).then((response) => response);
-}
+axiosClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Handle unauthorized access
+    }
+    return Promise.reject(error);
+  }
+);
 
-export function patchRequest(URL, payload) {
-    return axiosClient.patch(`/${URL}`, payload).then((response) => response);
-}
+export const getRequest = (URL, params) => axiosClient.get(`/${URL}`, { params });
+export const postRequest = (URL, payload) => axiosClient.post(`/${URL}`, payload);
+export const patchRequest = (URL, payload) => axiosClient.patch(`/${URL}`, payload);
+export const putRequest = (URL, payload) => axiosClient.put(`/${URL}`, payload);
+export const deleteRequest = (URL) => axiosClient.delete(`/${URL}`);
 
-export function putRequest(URL, payload) {
-    return axiosClient.put(`/${URL}`, payload).then((response) => response);
-}
-
-export function deleteRequest(URL) {
-    return axiosClient.delete(`/${URL}`).then((response) => response);
-}
-
-//  Axios client to post multipart/form-data
-const axiosClientWithFiles = axios.create();
-
-axiosClientWithFiles.defaults.baseURL = constants.HOST_URL;
-axiosClientWithFiles.defaults.headers = {
+const axiosClientWithFiles = axios.create({
+  baseURL: constants.HOST_URL,
+  headers: {
     "Content-Type": "multipart/form-data",
-    Accept: 'multipart/form-data',
-};
-
-axiosClientWithFiles.interceptors.request.use(function (config) {
-    const token = getStorage("token");
-    config.headers.Authorization = token;
-    return config;
+    Accept: "multipart/form-data",
+  },
 });
 
-export function postRequestWithFiles(URL, payload) {
-    return axiosClientWithFiles
-        .post(`/${URL}`, payload)
-        .then((response) => response);
-}
+axiosClientWithFiles.interceptors.request.use((config) => {
+  const token = getStorage("token");
+  if (token) {
+    config.headers.Authorization = token;
+  }
+  return config;
+});
+
+export const postRequestWithFiles = (URL, payload) => axiosClientWithFiles.post(`/${URL}`, payload);
+export const putRequestWithFiles = (URL, payload) => axiosClientWithFiles.put(`/${URL}`, payload);

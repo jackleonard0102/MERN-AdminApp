@@ -1,5 +1,4 @@
-import React, { Suspense, useEffect, memo, useContext } from "react";
-// import HashLoader from "react-spinners/HashLoader";
+import React, { Suspense, useEffect, memo } from "react";
 import { ConfigProvider, Spin, theme } from "antd";
 import classNames from "classnames";
 import jwt_decode from "jwt-decode";
@@ -28,7 +27,6 @@ import "./App.css";
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
 const App = () => {
-
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.app.isDarkMode);
 
@@ -37,12 +35,14 @@ const App = () => {
     if (token) {
       let user = jwt_decode(token);
       if (user.exp * 1000 < Date.now()) {
+        console.log('Token expired, logging out');
         dispatch(logout());
       }
     } else {
+      console.log('No token found, logging out');
       dispatch(logout());
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <HappyProvider>

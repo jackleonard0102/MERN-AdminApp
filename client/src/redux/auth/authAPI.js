@@ -19,9 +19,6 @@ import {
   updatePasswordFailure,
   deleteAccount,
   deleteAccountFailure,
-  getPlan,
-  getPlanSuccess,
-  getPlanFailure,
 } from './authSlice';
 import { getRequest, postRequest } from '../../services/axiosClient';
 import { setStorage } from '../../helpers';
@@ -104,19 +101,7 @@ function* getUserAPI() {
   }
 }
 
-function* getPlanAPI() {
-  try {
-    const response = yield call(() => getRequest('plans/activePlan'));
-    let data = response.data;
-    if (!data.plan?.property) {
-      data.plan = undefined;
-    }
-    yield put(getPlanSuccess(data));
-  } catch (e) {
-    yield put(getPlanFailure());
-  }
-}
 
 export default function* rootSaga() {
-  yield all([takeLatest(login, loginAPI), takeLatest(register, registerAPI), takeLatest(logout, logoutAPI), takeLatest(getUser, getUserAPI), takeLatest(updateProfile, updateProfileAPI), takeLatest(updatePassword, updatePasswordAPI), takeLatest(deleteAccount, deleteAccountAPI), takeLatest(getPlan, getPlanAPI)]);
+  yield all([takeLatest(login, loginAPI), takeLatest(register, registerAPI), takeLatest(logout, logoutAPI), takeLatest(getUser, getUserAPI), takeLatest(updateProfile, updateProfileAPI), takeLatest(updatePassword, updatePasswordAPI), takeLatest(deleteAccount, deleteAccountAPI)]);
 }

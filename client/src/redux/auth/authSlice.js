@@ -4,7 +4,6 @@ const initialState = {
   isAuthenticated: false,
   loader: false,
   user: {},
-  plan: {},
   errors: {},
 };
 
@@ -88,18 +87,7 @@ const authSlice = createSlice({
     deleteAccountFailure(state, action) {
       state.loader = false;
       state.errors = action.payload.errors;
-    },
-    getPlan(state) {
-      state.loader = true;
-    },
-    getPlanSuccess(state, action) {
-      state.loader = false;
-      state.plan = action.payload.plan;
-    },
-    getPlanFailure(state) {
-      state.loader = false;
-      state.plan = null;
-    },
+    }
   },
 });
 
@@ -122,8 +110,5 @@ export const {
   updatePasswordFailure,
   deleteAccount,
   deleteAccountFailure,
-  getPlan,
-  getPlanSuccess,
-  getPlanFailure,
 } = authSlice.actions;
 export default authSlice.reducer;
