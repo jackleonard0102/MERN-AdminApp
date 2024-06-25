@@ -1,13 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Col,
-  Row,
-  Input,
-  Layout,
-  Typography
-} from "antd";
+import { Col, Row, Input, Layout, Typography } from "antd";
 
 import { setStorage } from "../../../helpers";
 
@@ -53,9 +47,9 @@ function Report() {
         </Col>
         <Col span={1} className="justify-center items-center my-auto">
           <p className="my-auto"> to </p>
-        </Col>        
+        </Col>
         <Col sm={12} md={8} lg={6} xl={4}>
-          <Search placeholder="Email..." allowClear />
+          <Search placeholder="Select Date" allowClear />
         </Col>
       </Row>
     </Content>
