@@ -6,6 +6,7 @@ const router = express.Router();
 
 const authRouter = require('./auth');
 const userRouter = require('./user');
+const logoRouter = require('./logo')
 
 const authMiddleware = require('../middlewares/auth');
 const { jwtAuth } = authMiddleware;
@@ -18,5 +19,6 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRouter);
 router.use('/users', jwtAuth, userRouter);
+router.use('/logos', logoRouter);
 
 module.exports = router;

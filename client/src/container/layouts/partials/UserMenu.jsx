@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Dropdown } from 'antd';
-import { LockOutlined, UserOutlined, IdcardOutlined, SafetyOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, HighlightOutlined, IdcardOutlined, SafetyOutlined } from '@ant-design/icons';
 
 import { logout } from '../../../redux/auth/authSlice';
 import constants from '../../../config/constants';
@@ -42,6 +42,11 @@ const UserMenu = () => {
                 label: 'Users',
                 key: '/admin/users',
                 icon: <UserOutlined />,
+              },
+              {
+                label: 'Logo',
+                key: '/admin/logo',
+                icon: <HighlightOutlined />,
               },
             ],
           },

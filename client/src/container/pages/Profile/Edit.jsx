@@ -8,7 +8,6 @@ import DeleteAccountForm from './Partials/DeleteAccountForm';
 const { Title, Text } = Typography;
 
 function Edit() {
-
   return (
     <div className='container mx-auto my-4 px-4'>
       <Row gutter={[16, 16]}>
