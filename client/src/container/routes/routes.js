@@ -45,6 +45,7 @@ const routes = [
     path: 'user/profile',
     component: lazy(() => import('../pages/Profile/Edit')),
     exact: true,
+    isAdmin: true,
   },
   {
     path: 'admin/users',
