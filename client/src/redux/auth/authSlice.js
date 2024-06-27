@@ -87,10 +87,7 @@ const authSlice = createSlice({
     deleteAccountFailure(state, action) {
       state.loader = false;
       state.errors = action.payload.errors;
-    },
-    updateLoginLogo(state, action) {
-      state.loginPageLogo = action.payload.logoUrl;
-    },
+    }
   },
 });
 
@@ -113,6 +110,5 @@ export const {
   updatePasswordFailure,
   deleteAccount,
   deleteAccountFailure,
-  updateLoginLogo,
 } = authSlice.actions;
 export default authSlice.reducer;

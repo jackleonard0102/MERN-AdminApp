@@ -58,6 +58,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
+
 exports.updateUserDetails = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -93,6 +94,7 @@ exports.updateUserDetails = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 exports.updateUserStatus = async (req, res) => {
   try {
