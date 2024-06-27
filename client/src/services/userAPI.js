@@ -16,9 +16,9 @@ export const getAllUsers = async (query) => {
 
 export const updateUserStatus = async (userId, status) => {
   try {
-    await putRequest(`users/${userId}/status`, { status }); // Ensure the URL is correct
+    await putRequest(`users/${userId}/status`, status); // Ensure the URL is correct
   } catch (error) {
-    console.error('[UPDATE user status error]', error);
+    console.error('[UPDATE user status error]', error.response || error); // Log the response error
     throw error;
   }
 };

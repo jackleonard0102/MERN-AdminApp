@@ -32,16 +32,16 @@ exports.createUser = async (req, res) => {
     let permissionValue;
 
     // Check permission value and assign accordingly
-    if (permission === 'Admin') {
+    if (permission == 1) {
       permissionValue = 1;
-    } else if (permission === 'User') {
+    } else if (permission == 2) {
       permissionValue = 2;
     } else {
       return res.status(400).json({ success: false, message: 'Invalid permission value' });
     }
 
     // Create new user instance with the mapped permission value
-    const user = new User ({
+    const user = new User({
       name,
       email,
       password,
@@ -67,9 +67,9 @@ exports.updateUserDetails = async (req, res) => {
     // Map permission field if present
     if (updateData.permission) {
       const permission = updateData.permission.toLowerCase();
-      if (permission === 'Admin') {
+      if (permission == 1) {
         updateData.permission = 1;
-      } else if (permission === 'User') {
+      } else if (permission == 2) {
         updateData.permission = 2;
       } else {
         return res.status(400).json({ success: false, message: 'Invalid permission value' });
@@ -100,11 +100,14 @@ exports.updateUserStatus = async (req, res) => {
   try {
     const { userId } = req.params;
     const { status } = req.body;
+
+    // Assuming you have a User model and a method to update the status
     await User.findByIdAndUpdate(userId, { status });
-    return res.status(200).json({ success: true, message: 'User status updated successfully' });
+
+    res.status(200).json({ message: 'User status updated successfully' });
   } catch (error) {
-    _error(error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error('Error updating user status:', error);
+    res.status(500).json({ message: 'Error updating user status', error });
   }
 };
 

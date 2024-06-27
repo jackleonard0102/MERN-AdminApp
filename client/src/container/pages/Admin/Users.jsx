@@ -184,11 +184,17 @@ function Users() {
     }
   };
 
-  const handleStatusChange = async (userId, currentStatus) => {
-    const newStatus = currentStatus === 1 ? 0 : 1;
+const handleStatusChange = async (userId, currentStatus) => {
+  const newStatus = currentStatus == 1 ? 0 : 1;
+  try {
     await updateUserStatus(userId, { status: newStatus });
     getUsers();
-  };
+  } catch (error) {
+    console.error('Failed to update user status', error);
+    message.error('Failed to update user status');
+  }
+};
+
 
   const handleCreate = async () => {
     try {
@@ -200,7 +206,14 @@ function Users() {
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("password", values.password);
-      formData.append("permission", values.permission === "admin" ? 1 : 2);
+      formData.append(
+        "permission",
+        values.permission === "admin"
+          ? 1
+          : values.permission === "user"
+          ? 2
+          : null
+      );
 
       await createUser(formData);
       setIsCreateModalVisible(false);
