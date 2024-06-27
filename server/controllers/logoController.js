@@ -9,6 +9,7 @@ exports.uploadLogo = (req, res) => {
   res.status(200).send({ logoUrl });
 };
 
+
 exports.serveLogo = (req, res) => {
   const logoPath = path.join(__dirname, '../../uploads/logos', req.params.filename);
   res.sendFile(logoPath);

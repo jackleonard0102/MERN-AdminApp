@@ -5,10 +5,9 @@ import constants from '../config/constants';
 import { getStorage } from '../helpers';
 
 const axiosClient = axios.create({
-  baseURL: constants.HOST_URL,
+  baseURL: 'http://localhost:5000/api',
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    'Content-Type': 'multipart/form-data',
   },
 });
 
@@ -55,7 +54,9 @@ axiosClientWithFiles.interceptors.request.use((config) => {
 });
 
 // Requests for handling file uploads
-export const postRequestWithFiles = (URL, formData) => axiosClientWithFiles.post(`/${URL}`, formData);
+export const postRequestWithFiles = (url, data) => {
+  return axiosClient.post(url, data);
+};
 export const putRequestWithFiles = (URL, formData) => axiosClientWithFiles.put(`/${URL}`, formData);
 
 export default axiosClient;
