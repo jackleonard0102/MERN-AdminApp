@@ -41,11 +41,11 @@ function UpdateProfileForm() {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(user.avatar);
+  const [imageUrl, setImageUrl] = useState(user.logo);
 
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
-    dispatch(updateProfile({ ...values, avatar: imageUrl }));
+    dispatch(updateProfile({ ...values, logo: imageUrl }));
   };
 
   const handleChange = (info) => {
@@ -80,12 +80,12 @@ function UpdateProfileForm() {
         scrollToFirstError
         onFinish={onFinish}
       >
-        <Form.Item name="avatar">
+        <Form.Item name="logo">
           <ImgCrop rotationSlider>
             <Upload
               name="file"
               listType="picture-circle"
-              className="avatar-uploader"
+              className="logo-uploader"
               multiple={false}
               showUploadList={false}
               action={`${constants.HOST_URL}users/upload`}
@@ -107,9 +107,9 @@ function UpdateProfileForm() {
                     src={
                       imageUrl
                         ? `${constants.SOCKET_URL}${imageUrl}`
-                        : '/imgs/avatar.jpg'
+                        : '/imgs/logo.jpg'
                     }
-                    alt="avatar"
+                    alt="logo"
                     className="w-full rounded-full"
                   />
                   <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">

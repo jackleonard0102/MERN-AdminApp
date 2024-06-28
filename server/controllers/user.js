@@ -48,7 +48,7 @@ exports.createUser = async (req, res) => {
       email,
       password,
       permission: permissionValue,
-      avatar: req.file?.path
+      logo: req.file?.path
     });
 
     // Save user to the database
@@ -80,9 +80,9 @@ exports.updateUserDetails = async (req, res) => {
       }
     }
 
-    // Update avatar path if file is present
+    // Update logo path if file is present
     if (req.file) {
-      updateData.avatar = req.file.path.replace(/\\/g, '/').replace('public/', '/');
+      updateData.logo = req.file.path.replace(/\\/g, '/').replace('public/', '/');
     }
 
     // Update user details in the database
@@ -187,7 +187,7 @@ exports.upload = async (req, res) => {
     const file = req.file;
     const oldFile = req.body.oldFile;
     if (oldFile) delFile(`public${oldFile}`);
-    req.user.avatar = file.path.replace(/\\/g, '/').replace('public/', '/');
+    req.user.logo = file.path.replace(/\\/g, '/').replace('public/', '/');
     await req.user.save();
     return res.json({
       success: true,
@@ -206,7 +206,7 @@ exports.getUser = async (req, res) => {
       _id: req.user._id,
       email: req.user.email,
       name: req.user.name,
-      avatar: req.user.avatar,
+      logo: req.user.logo,
       isAdmin: req.user.permission == 1,
     };
     return res.json({ success: true, user });

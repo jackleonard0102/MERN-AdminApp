@@ -33,9 +33,9 @@ const UserMenu = () => {
           <Avatar
             size="large"
             src={
-              user.avatar
-                ? `${constants.SOCKET_URL}${user.avatar}`
-                : '/imgs/avatar.jpg'
+              user.logo
+                ? `${constants.SOCKET_URL}${user.logo}`
+                : '/imgs/logo.jpg'
             }
           />
           <div className="ml-1">
@@ -90,9 +90,7 @@ const UserMenu = () => {
     >
       <Avatar
         src={
-          user.avatar
-            ? `${constants.SOCKET_URL}${user.avatar}`
-            : '/imgs/avatar.jpg'
+          user.logo ? `${constants.SOCKET_URL}${user.logo}` : '/imgs/logo.jpg'
         }
         className="shadow-lg cursor-pointer"
       />

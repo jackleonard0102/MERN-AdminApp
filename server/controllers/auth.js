@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
         name: req.user.name,
         email: req.user.email,
         stripeId: req.user.stripeId,
-        avatar: req.user.avatar,
+        logo: req.user.logo,
         isAdmin: req.user.permission == 1,
     };
 

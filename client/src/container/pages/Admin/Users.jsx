@@ -78,9 +78,9 @@ function Users() {
           {/* <Avatar
             size="large"
             src={
-              row.avatar
-                ? `${constants.SOCKET_URL}${row.avatar}`
-                : '/imgs/avatar.jpg'
+              row.logo
+                ? `${constants.SOCKET_URL}${row.logo}`
+                : '/imgs/logo.jpg'
             }
           /> */}
           <div className="ml-2">
@@ -210,8 +210,8 @@ function Users() {
     try {
       const values = await createForm.validateFields();
       const formData = new FormData();
-      if (values.avatar && values.avatar.file) {
-        formData.append('avatar', values.avatar.file.originFileObj);
+      if (values.logo && values.logo.file) {
+        formData.append('logo', values.logo.file.originFileObj);
       }
       formData.append('name', values.name);
       formData.append('email', values.email);
@@ -231,8 +231,8 @@ function Users() {
     try {
       const values = await form.validateFields();
       const formData = new FormData();
-      if (values.avatar && values.avatar.file) {
-        formData.append('avatar', values.avatar.file.originFileObj);
+      if (values.logo && values.logo.file) {
+        formData.append('logo', values.logo.file.originFileObj);
       }
       formData.append('name', values.name);
       formData.append('email', values.email);
@@ -297,12 +297,12 @@ function Users() {
   const showUpdateModal = (user) => {
     setSelectedUser(user);
     form.setFieldsValue({
-      avatar: user.avatar,
+      logo: user.logo,
       name: user.name,
       email: user.email,
       permission: user.permission.toString(), // Convert permission to string
     });
-    setImageUrl(user.avatar); // Set the initial avatar URL
+    setImageUrl(user.logo); // Set the initial logo URL
     setIsUpdateModalVisible(true);
   };
 
@@ -351,7 +351,7 @@ function Users() {
       >
         <Form form={createForm} layout="vertical">
           {/* <Form.Item
-            name="avatar"
+            name="logo"
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
@@ -361,7 +361,7 @@ function Users() {
               <Upload
                 name="file"
                 listType="picture-circle"
-                className="avatar-uploader"
+                className="logo-uploader"
                 multiple={false}
                 showUploadList={false}
                 action={`${constants.HOST_URL}users/upload`}
@@ -382,9 +382,9 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : '/imgs/avatar.jpg'
+                          : '/imgs/logo.jpg'
                       }
-                      alt="avatar"
+                      alt="logo"
                       className="w-full rounded-full"
                     />
                     <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
@@ -440,7 +440,7 @@ function Users() {
       >
         <Form form={form} layout="vertical">
           {/* <Form.Item
-            name="avatar"
+            name="logo"
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
@@ -449,7 +449,7 @@ function Users() {
               <Upload
                 name="file"
                 listType="picture-circle"
-                className="avatar-uploader"
+                className="logo-uploader"
                 multiple={false}
                 showUploadList={false}
                 action={`${constants.HOST_URL}users/upload`}
@@ -470,9 +470,9 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : '/imgs/avatar.jpg'
+                          : '/imgs/logo.jpg'
                       }
-                      alt="avatar"
+                      alt="logo"
                       className="w-full rounded-full"
                     />
                     <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
