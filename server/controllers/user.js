@@ -36,6 +36,10 @@ exports.createUser = async (req, res) => {
       permissionValue = 1;
     } else if (permission == 2) {
       permissionValue = 2;
+    } else if (permission == 3) {
+      permissionValue = 3;
+    } else if (permission == 4) {
+      permissionValue = 4;
     } else {
       return res.status(400).json({ success: false, message: 'Invalid permission value' });
     }
@@ -71,6 +75,10 @@ exports.updateUserDetails = async (req, res) => {
         updateData.permission = 1;
       } else if (permission == 2) {
         updateData.permission = 2;
+      } else if (permission == 3) {
+        updateData.permission = 3;
+      } else if (permission == 4) {
+        updateData.permission = 4;
       } else {
         return res.status(400).json({ success: false, message: 'Invalid permission value' });
       }

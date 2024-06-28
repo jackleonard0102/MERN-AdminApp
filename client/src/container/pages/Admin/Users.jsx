@@ -108,7 +108,20 @@ function Users() {
       dataIndex: "permission",
       key: "permission",
       align: "center",
-      render: (permission) => (permission === 1 ? "Admin" : "User"),
+      render: (permission) => {
+        switch (permission) {
+          case 1:
+            return "Admin";
+          case 2:
+            return "Office Manager";
+          case 3:
+            return "Office Clerk";
+          case 4:
+            return "Field Clerk";
+          default:
+            return "Unknown";
+        }
+      },
     },
     {
       title: "Action",
@@ -184,17 +197,16 @@ function Users() {
     }
   };
 
-const handleStatusChange = async (userId, currentStatus) => {
-  const newStatus = currentStatus == 1 ? 0 : 1;
-  try {
-    await updateUserStatus(userId, { status: newStatus });
-    getUsers();
-  } catch (error) {
-    console.error('Failed to update user status', error);
-    message.error('Failed to update user status');
-  }
-};
-
+  const handleStatusChange = async (userId, currentStatus) => {
+    const newStatus = currentStatus == 1 ? 0 : 1;
+    try {
+      await updateUserStatus(userId, { status: newStatus });
+      getUsers();
+    } catch (error) {
+      console.error("Failed to update user status", error);
+      message.error("Failed to update user status");
+    }
+  };
 
   const handleCreate = async () => {
     try {
@@ -206,14 +218,7 @@ const handleStatusChange = async (userId, currentStatus) => {
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("password", values.password);
-      formData.append(
-        "permission",
-        values.permission === "admin"
-          ? 1
-          : values.permission === "user"
-          ? 2
-          : null
-      );
+      formData.append("permission", parseInt(values.permission, 10)); // Updated
 
       await createUser(formData);
       setIsCreateModalVisible(false);
@@ -233,7 +238,7 @@ const handleStatusChange = async (userId, currentStatus) => {
       }
       formData.append("name", values.name);
       formData.append("email", values.email);
-      formData.append("permission", values.permission === "admin" ? 1 : 2);
+      formData.append("permission", parseInt(values.permission, 10)); // Updated
 
       await updateUserDetails(selectedUser._id, formData);
       setIsUpdateModalVisible(false);
@@ -297,7 +302,7 @@ const handleStatusChange = async (userId, currentStatus) => {
       avatar: user.avatar,
       name: user.name,
       email: user.email,
-      permission: user.permission === 1 ? "admin" : "user",
+      permission: user.permission.toString(), // Convert permission to string
     });
     setImageUrl(user.avatar); // Set the initial avatar URL
     setIsUpdateModalVisible(true);
@@ -352,7 +357,7 @@ const handleStatusChange = async (userId, currentStatus) => {
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
-            rules={[{ required: false }]} // Change to required false
+            rules={[{ required: false }]}
           >
             <ImgCrop rotationSlider>
               <Upload
@@ -419,8 +424,10 @@ const handleStatusChange = async (userId, currentStatus) => {
             rules={[{ required: true, message: "Please select a permission" }]}
           >
             <Select placeholder="Select permission">
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
+              <Option value="1">Admin</Option>
+              <Option value="2">Office Manager</Option>
+              <Option value="3">Office Clerk</Option>
+              <Option value="4">Field Clerk</Option>
             </Select>
           </Form.Item>
         </Form>
@@ -499,8 +506,10 @@ const handleStatusChange = async (userId, currentStatus) => {
             rules={[{ required: true, message: "Please select a permission" }]}
           >
             <Select placeholder="Select permission">
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
+              <Option value="1">Admin</Option>
+              <Option value="2">Office Manager</Option>
+              <Option value="3">Office Clerk</Option>
+              <Option value="4">Field Clerk</Option>
             </Select>
           </Form.Item>
         </Form>
