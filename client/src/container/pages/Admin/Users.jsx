@@ -350,7 +350,7 @@ function Users() {
         onOk={handleCreate}
       >
         <Form form={createForm} layout="vertical">
-          <Form.Item
+          {/* <Form.Item
             name="avatar"
             label="Avatar"
             valuePropName="file"
@@ -394,7 +394,7 @@ function Users() {
                 )}
               </Upload>
             </ImgCrop>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="name"
             label="Name"
@@ -439,7 +439,7 @@ function Users() {
         onOk={handleUpdate}
       >
         <Form form={form} layout="vertical">
-          <Form.Item
+          {/* <Form.Item
             name="avatar"
             label="Avatar"
             valuePropName="file"
@@ -482,7 +482,7 @@ function Users() {
                 )}
               </Upload>
             </ImgCrop>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="name"
             label="Name"

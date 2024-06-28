@@ -207,7 +207,7 @@ exports.getUser = async (req, res) => {
       email: req.user.email,
       name: req.user.name,
       avatar: req.user.avatar,
-      isAdmin: req.user.permission === 1,
+      isAdmin: req.user.permission == 1,
     };
     return res.json({ success: true, user });
   } catch (error) {
