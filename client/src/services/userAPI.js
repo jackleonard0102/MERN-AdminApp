@@ -3,7 +3,7 @@ import { getRequest, postRequest, putRequest, deleteRequest, postRequestWithFile
 
 export const getAllUsers = async (query) => {
   try {
-    const response = await getRequest('users', query); // Ensure the URL is correct
+    const response = await getRequest('users', { ...query, excludePermission: 1 }); // Adding excludePermission to query
     return response.data;
   } catch (error) {
     console.log('[GET users error]', error);

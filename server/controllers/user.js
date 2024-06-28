@@ -32,9 +32,7 @@ exports.createUser = async (req, res) => {
     let permissionValue;
 
     // Check permission value and assign accordingly
-    if (permission == 1) {
-      permissionValue = 1;
-    } else if (permission == 2) {
+    if (permission == 2) {
       permissionValue = 2;
     } else if (permission == 3) {
       permissionValue = 3;
@@ -71,9 +69,7 @@ exports.updateUserDetails = async (req, res) => {
     // Map permission field if present
     if (updateData.permission) {
       const permission = updateData.permission.toLowerCase();
-      if (permission == 1) {
-        updateData.permission = 1;
-      } else if (permission == 2) {
+      if (permission == 2) {
         updateData.permission = 2;
       } else if (permission == 3) {
         updateData.permission = 3;
