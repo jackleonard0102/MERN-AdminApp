@@ -66,7 +66,7 @@ function UpdateProfileForm() {
       <div className="my-4">
         <Title level={3}>Profile Information</Title>
         <Text type="secondary">
-          Update your account's profile information and email address.
+          Update your welcome page's logo with your username and email.
         </Text>
       </div>
       <Form
@@ -107,7 +107,7 @@ function UpdateProfileForm() {
                     src={
                       imageUrl
                         ? `${constants.SOCKET_URL}${imageUrl}`
-                        : '/imgs/avatar.png'
+                        : '/imgs/avatar.jpg'
                     }
                     alt="avatar"
                     className="w-full rounded-full"

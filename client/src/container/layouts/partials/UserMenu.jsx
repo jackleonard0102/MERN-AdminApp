@@ -35,7 +35,7 @@ const UserMenu = () => {
             src={
               user.avatar
                 ? `${constants.SOCKET_URL}${user.avatar}`
-                : '/imgs/avatar.png'
+                : '/imgs/avatar.jpg'
             }
           />
           <div className="ml-1">
@@ -50,7 +50,7 @@ const UserMenu = () => {
       children: [
         {
           label: 'Profile',
-          key: '/user/profile',
+          key: '/admin/profile',
           icon: <IdcardOutlined />,
         },
         {
@@ -63,11 +63,6 @@ const UserMenu = () => {
               label: 'Users',
               key: '/admin/users',
               icon: <UserOutlined />,
-            },
-            {
-              label: 'Logo',
-              key: '/admin/logo',
-              icon: <HighlightOutlined />,
             },
           ],
         },
@@ -97,7 +92,7 @@ const UserMenu = () => {
         src={
           user.avatar
             ? `${constants.SOCKET_URL}${user.avatar}`
-            : '/imgs/avatar.png'
+            : '/imgs/avatar.jpg'
         }
         className="shadow-lg cursor-pointer"
       />

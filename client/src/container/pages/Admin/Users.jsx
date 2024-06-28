@@ -80,7 +80,7 @@ function Users() {
             src={
               row.avatar
                 ? `${constants.SOCKET_URL}${row.avatar}`
-                : '/imgs/avatar.png'
+                : '/imgs/avatar.jpg'
             }
           />
           <div className="ml-2">
@@ -382,7 +382,7 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : '/imgs/avatar.png'
+                          : '/imgs/avatar.jpg'
                       }
                       alt="avatar"
                       className="w-full rounded-full"
@@ -470,7 +470,7 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : '/imgs/avatar.png'
+                          : '/imgs/avatar.jpg'
                       }
                       alt="avatar"
                       className="w-full rounded-full"
