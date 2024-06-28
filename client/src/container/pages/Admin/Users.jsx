@@ -75,14 +75,14 @@ function Users() {
       key: 'name',
       render: (_, row) => (
         <div className="flex items-center">
-          <Avatar
+          {/* <Avatar
             size="large"
             src={
               row.avatar
                 ? `${constants.SOCKET_URL}${row.avatar}`
                 : '/imgs/avatar.jpg'
             }
-          />
+          /> */}
           <div className="ml-2">
             <b>{row.name}</b>
             <br />
