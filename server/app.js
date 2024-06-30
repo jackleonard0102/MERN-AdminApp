@@ -13,12 +13,14 @@ const socketIO = require("./socket");
 const api = require("./routes");
 const UserModel = require("./models/userModel");
 const { _log, _error } = require("./utils/logging");
+const seedAdmin = require("./models/seedAdmin");
 
 mongoose
   .connect(config.MongoURL)
   .then(async () => {
     await UserModel.updateMany({}, { $set: { socketId: [] } });
     _log("MONGODB connected!");
+    await seedAdmin(); // Seed the admin user
   })
   .catch(_error);
 
