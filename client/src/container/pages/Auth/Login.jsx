@@ -1,6 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Input, Button, Checkbox, Card, Typography, Modal } from 'antd';
+import {
+  Form,
+  Input,
+  Image,
+  Button,
+  Checkbox,
+  Card,
+  Typography,
+  Modal,
+} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '../../../redux/auth/authSlice';
 import GuestLayout from '../../layouts/GuestLayout';
@@ -9,12 +18,11 @@ import { forgotPassword } from '../../../services/authAPI';
 const { Title } = Typography;
 
 function Login() {
-
   const dispatch = useDispatch();
   const emailRef = useRef();
 
-  const loader = useSelector(state => state.auth.loader);
-  const errors = useSelector(state => state.auth.errors);
+  const loader = useSelector((state) => state.auth.loader);
+  const errors = useSelector((state) => state.auth.errors);
 
   const [form] = Form.useForm();
 
@@ -28,9 +36,16 @@ function Login() {
 
   return (
     <GuestLayout>
-      <Card className='w-[400px] shadow-lg'>
-        <div className="text-center my-4">
-          <Title level={3}>Log In</Title>
+      <Card className="w-[400px] shadow-lg">
+        <div className="flex justify-center items-center text-center my-4">
+          <Image
+            className="mb-5 rounded-full"
+            width={100}
+            src="http://localhost:5000/upload/logo.png"
+          />
+          <Title className="ml-5" level={3}>
+            Log In
+          </Title>
         </div>
         <Form
           name="login_form"
@@ -51,9 +66,10 @@ function Login() {
             validateStatus={errors.email ? 'error' : ''}
             help={errors.email}
           >
-            <Input size="large"
+            <Input
+              size="large"
               prefix={<UserOutlined className="site-form-item-icon" />}
-              type='email'
+              type="email"
               placeholder="Email"
               autoComplete="username"
               ref={emailRef}
@@ -82,19 +98,29 @@ function Login() {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
-              <Button type='link' onClick={() => {
-                form.setFieldValue('email', emailRef.current.input.value);
-                setShowForgotModal(true);
-              }}><span className='underline'>Forgot password</span></Button>
+              {/* <Button
+                type="link"
+                onClick={() => {
+                  form.setFieldValue('email', emailRef.current.input.value);
+                  setShowForgotModal(true);
+                }}
+              >
+                <span className="underline">Forgot password</span>
+              </Button> */}
             </div>
           </Form.Item>
 
           <Form.Item>
-            <Button loading={loader} type="primary" htmlType="submit" className="w-full"
-              size="large">Log in
+            <Button
+              loading={loader}
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+              size="large"
+            >
+              Log in
             </Button>
           </Form.Item>
-
         </Form>
       </Card>
       <Modal
@@ -107,29 +133,36 @@ function Login() {
         onOk={() => {
           setLoading(true);
           forgotPassword({
-            ...form.getFieldsValue()
-          }).then(res => {
-            setMessage(res.data.message);
-          }).catch(err => {
-            console.log(err);
-            form.setFields([{
-              name: 'email',
-              errors: [err.response.data.message]
-            }]);
-          }).finally(() => setLoading(false));
+            ...form.getFieldsValue(),
+          })
+            .then((res) => {
+              setMessage(res.data.message);
+            })
+            .catch((err) => {
+              console.log(err);
+              form.setFields([
+                {
+                  name: 'email',
+                  errors: [err.response.data.message],
+                },
+              ]);
+            })
+            .finally(() => setLoading(false));
         }}
         styles={{
           mask: {
-            background: "#000e"
-          }
+            background: '#000e',
+          },
         }}
         width={350}
         okButtonProps={{ loading }}
       >
-        <p className='mb-2'>
-          Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+        <p className="mb-2">
+          Forgot your password? No problem. Just let us know your email address
+          and we will email you a password reset link that will allow you to
+          choose a new one.
         </p>
-        {message && <p className='text-green-500 my-2'>{message}</p>}
+        {message && <p className="text-green-500 my-2">{message}</p>}
         <Form form={form} layout="vertical">
           <Form.Item
             name="email"
@@ -137,15 +170,15 @@ function Login() {
             rules={[
               {
                 required: true,
-                message: "Please input email for forgot password.",
+                message: 'Please input email for forgot password.',
               },
               {
-                type: "email",
-                message: "Invalid email",
-              }
+                type: 'email',
+                message: 'Invalid email',
+              },
             ]}
           >
-            <Input placeholder='Email' className="w-full" size="large" />
+            <Input placeholder="Email" className="w-full" size="large" />
           </Form.Item>
         </Form>
       </Modal>
