@@ -98,7 +98,7 @@ const UserMenu = () => {
       arrow
     >
       <Avatar
-        src={`http://localhost:5000/upload/logo.png?${refreshKey}`}
+        src={`http://localhost:5000/upload/logo.png?reload=${new Date().getTime()}`}
         className="shadow-lg cursor-pointer"
       />
     </Dropdown>
