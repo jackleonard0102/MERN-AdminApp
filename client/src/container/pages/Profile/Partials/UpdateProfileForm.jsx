@@ -108,7 +108,9 @@ function UpdateProfileForm() {
                   <img
                     src={
                       imageUrl
-                        ? `${constants.SOCKET_URL}${imageUrl}?reload=${Date.now}`
+                        ? `${
+                            constants.SOCKET_URL
+                          }${imageUrl}?reload=${new Date().getTime()}`
                         : '/imgs/logo.jpg'
                     }
                     alt="logo"

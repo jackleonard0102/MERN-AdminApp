@@ -34,6 +34,13 @@ function Login() {
     dispatch(login(values));
   };
 
+  const [refreshKey, setRefreshKey] = useState(0); // Initialize with 0 or any value
+
+  // Function to update the key and force refresh
+  const refreshImage = () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <GuestLayout>
       <Card className="w-[400px] shadow-lg">
@@ -41,7 +48,7 @@ function Login() {
           <Image
             className="mb-5 rounded-full"
             width={100}
-            src="http://localhost:5000/upload/logo.png"
+            src={`http://localhost:5000/upload/logo.png?${refreshKey}`} // Append refreshKey as query parameter
           />
           <Title className="ml-5" level={3}>
             Log In
