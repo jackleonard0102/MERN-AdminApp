@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Layout, Menu, Drawer } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import {
   DashboardOutlined,
@@ -11,42 +11,22 @@ import {
   UserAddOutlined,
   UsergroupAddOutlined,
   MenuOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import UserMenu from './partials/UserMenu';
 import LogoSrc from '../../assets/images/logo.png';
 import smLogoSrc from '../../assets/images/logo-sm.png';
 import Settings from './partials/Settings';
+import { logout } from '../../redux/auth/authSlice';
 
 const { Header } = Layout;
-
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-}
 
 function AuthLayout({ children }) {
   const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.app.isDarkMode);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const size = useWindowSize();
+
+  const dispatch = useDispatch();
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -109,78 +89,44 @@ function AuthLayout({ children }) {
       key: '/reports',
       icon: <FileTextOutlined />,
     },
+    {
+      label: 'Logout',
+      key: '/logout',
+      icon: <LogoutOutlined />,
+    },
   ];
 
   return (
     <>
       <Layout className="min-h-screen">
         <Header
-          className={classNames(
-            'shadow sticky top-0 z-[999] transition-colors duration-300',
-            {
-              'bg-white text-black': !isDarkMode,
-              'bg-gray-900 text-white': isDarkMode,
-            }
-          )}
+          className={classNames('shadow sticky top-0 z-[999]', {
+            'bg-white text-black': !isDarkMode,
+            //   'bg-gray-900 text-white': isDarkMode,
+          })}
         >
-          <div className="flex items-center justify-between px-2 max-w-7xl mx-auto">
-            <div
-              className={classNames('demo-logo h-[64px] mb-2', {
-                'bg-white': !isDarkMode,
-                'bg-gray-900': isDarkMode,
-              })}
-            >
+          <div className="flex items-center max-w-7xl mx-auto w-full">
+            <div className={classNames('h-16')}>
               <Link to="/dashboard" className="hidden sm:inline">
-                <img src={LogoSrc} alt="logo" className="w-[64px] p-3" />
+                <img src={LogoSrc} alt="logo" className="h-16 p-3" />
               </Link>
               <Link to="/dashboard" className="inline sm:hidden">
-                <img src={smLogoSrc} alt="logo" className="w-[64px] p-3" />
+                <img src={smLogoSrc} alt="logo" className="h-16 p-3" />
               </Link>
             </div>
-            <div className="flex items-center space-x-4">
-              {size.width >= 768 ? (
-                <Menu
-                  mode="horizontal"
-                  className={classNames('bg-transparent border-b-0', {
-                    'text-black': !isDarkMode,
-                    'text-white': isDarkMode,
-                  })}
-                  items={menuItems}
-                  onClick={({ item, key }) => {
-                    navigate(key);
-                  }}
-                />
-              ) : (
-                <>
-                  <Button
-                    icon={<MenuOutlined />}
-                    onClick={showDrawer}
-                    className={classNames({
-                      'text-black': !isDarkMode,
-                      'text-white': isDarkMode,
-                    })}
-                  />
-                  <Drawer
-                    title="Menu"
-                    placement="right"
-                    onClose={onClose}
-                    visible={drawerVisible}
-                  >
-                    <Menu
-                      mode="inline"
-                      items={menuItems}
-                      onClick={({ item, key }) => {
-                        navigate(key);
-                        onClose();
-                      }}
-                    />
-                  </Drawer>
-                </>
-              )}
-              <div className="ml-4 ">
-                <UserMenu />
-              </div>
-            </div>
+            <Menu
+              mode="horizontal"
+              theme={isDarkMode ? 'dark' : 'light'}
+              defaultSelectedKeys={['2']}
+              items={menuItems}
+              className={classNames('flex-1 min-w-0 flex justify-end')}
+              onClick={({ key }) => {
+                if (key == '/logout') {
+                  return dispatch(logout());
+                }
+                navigate(key);
+              }}
+            />
           </div>
         </Header>
         <Layout>{children}</Layout>

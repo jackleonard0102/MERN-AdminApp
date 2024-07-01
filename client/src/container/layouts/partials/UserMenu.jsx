@@ -98,11 +98,7 @@ const UserMenu = () => {
       arrow
     >
       <Avatar
-        src={
-          user.logo
-            ? `http://localhost:5000/upload/logo.png?${refreshKey}`
-            : '/imgs/logo.jpg'
-        }
+        src={`http://localhost:5000/upload/logo.png?${refreshKey}`}
         className="shadow-lg cursor-pointer"
       />
     </Dropdown>
