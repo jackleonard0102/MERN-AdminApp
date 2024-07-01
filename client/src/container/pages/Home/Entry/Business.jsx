@@ -326,27 +326,32 @@ function BusinessEntry() {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>
-                      Registration Certificate
-                    </Button>
-                  </Upload>
-                </Col>
-                <Col span={8}>
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>Authority Letter</Button>
-                  </Upload>
-                </Col>
-                <Col span={8}>
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>ID Copy</Button>
-                  </Upload>
-                </Col>
               </Row>
             </Form>
           </Panel>
         </Collapse>
+
+        <Form className="mt-5">
+          <Row gutter={24}>
+            <Col span={8}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>
+                  Registration Certificate
+                </Button>
+              </Upload>
+            </Col>
+            <Col span={8}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Authority Letter</Button>
+              </Upload>
+            </Col>
+            <Col span={8}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>ID Copy</Button>
+              </Upload>
+            </Col>
+          </Row>
+        </Form>
 
         <Flex className="my-6" vertical gap={32}>
           <TextArea

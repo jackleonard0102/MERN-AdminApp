@@ -523,20 +523,31 @@ function PersonalEntry() {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
-                  </Upload>
-                </Col>
-                <Col span={12}>
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>Authority Letter</Button>
-                  </Upload>
-                </Col>
               </Row>
             </Form>
           </Panel>
         </Collapse>
+        <Form
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+        >
+          <Row className="mt-5" gutter={24}>
+            <Col span={12}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
+              </Upload>
+            </Col>
+            <Col span={12}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Authority Letter</Button>
+              </Upload>
+            </Col>
+          </Row>
+        </Form>
 
         <div className="my-6">
           <TextArea
