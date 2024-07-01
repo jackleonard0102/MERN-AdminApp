@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Input,
@@ -38,6 +38,7 @@ function UpdateProfileForm() {
   const loader = useSelector((state) => state.auth.loader);
   const user = useSelector((state) => state.auth.user);
   const errors = useSelector((state) => state.auth.errors);
+  const [refresh, setRefresh] = useState(0);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ function UpdateProfileForm() {
       info.file.thumbUrl = `${constants.SOCKET_URL}${info.file.response?.path}`;
       setLoading(false);
       dispatch(getUser());
+      setRefresh((prev) => prev + 1);
     }
   };
 
@@ -106,7 +108,7 @@ function UpdateProfileForm() {
                   <img
                     src={
                       imageUrl
-                        ? `${constants.SOCKET_URL}${imageUrl}`
+                        ? `${constants.SOCKET_URL}${imageUrl}?reload=${refresh}`
                         : '/imgs/logo.jpg'
                     }
                     alt="logo"

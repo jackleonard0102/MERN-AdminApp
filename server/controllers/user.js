@@ -5,7 +5,7 @@ const { _log, _error } = require("../utils/logging");
 
 exports.getUsers = async (req, res) => {
   try {
-    let { page, limit, name, email, utm_source, utm_campaign } = req.query;
+    let { page, limit, name, email } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
     const skip = (page - 1) * limit;
@@ -42,16 +42,14 @@ exports.createUser = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid permission value' });
     }
 
-    // Create new user instance with the mapped permission value
     const user = new User({
       name,
       email,
       password,
-      permission: permissionValue,
+      permission,
       logo: req.file?.path
     });
 
-    // Save user to the database
     await user.save();
     return res.status(201).json({ success: true, message: 'User created successfully' });
   } catch (error) {
@@ -59,7 +57,6 @@ exports.createUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 exports.updateUserDetails = async (req, res) => {
   try {
@@ -80,12 +77,10 @@ exports.updateUserDetails = async (req, res) => {
       }
     }
 
-    // Update logo path if file is present
     if (req.file) {
-      updateData.logo = req.file.path.replace(/\\/g, '/').replace('public/', '/');
+      updateData.logo = req.file.path.replace(/\\/g, '/').replace('public/', '');
     }
 
-    // Update user details in the database
     const user = await User.findByIdAndUpdate(userId, updateData, { new: true });
 
     if (!user) {
@@ -99,13 +94,11 @@ exports.updateUserDetails = async (req, res) => {
   }
 };
 
-
 exports.updateUserStatus = async (req, res) => {
   try {
     const { userId } = req.params;
     const { status } = req.body;
 
-    // Assuming you have a User model and a method to update the status
     await User.findByIdAndUpdate(userId, { status });
 
     res.status(200).json({ message: 'User status updated successfully' });
@@ -186,7 +179,6 @@ exports.upload = async (req, res) => {
   try {
     const file = req.file;
     const oldFile = req.body.oldFile;
-    if (oldFile) delFile(`public${oldFile}`);
     req.user.logo = file.path.replace(/\\/g, '/').replace('public/', '/');
     await req.user.save();
     return res.json({

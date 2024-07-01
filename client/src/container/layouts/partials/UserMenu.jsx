@@ -5,7 +5,6 @@ import { Avatar, Dropdown } from 'antd';
 import {
   LockOutlined,
   UserOutlined,
-  HighlightOutlined,
   IdcardOutlined,
   SafetyOutlined,
 } from '@ant-design/icons';
@@ -34,7 +33,9 @@ const UserMenu = () => {
             size="large"
             src={
               user.logo
-                ? `${constants.SOCKET_URL}${user.logo}`
+                ? `${constants.SOCKET_URL}${
+                    user.logo
+                  }?reload=${new Date().getTime()}`
                 : '/imgs/logo.jpg'
             }
           />
@@ -90,7 +91,11 @@ const UserMenu = () => {
     >
       <Avatar
         src={
-          user.logo ? `${constants.SOCKET_URL}${user.logo}` : '/imgs/logo.jpg'
+          user.logo
+            ? `${constants.SOCKET_URL}${
+                user.logo
+              }?reload=${new Date().getTime()}`
+            : '/imgs/logo.jpg'
         }
         className="shadow-lg cursor-pointer"
       />
