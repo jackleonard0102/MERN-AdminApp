@@ -16,25 +16,39 @@ function ProtectedRoutes() {
   }, [dispatch]);
 
   // Separate routes into admin and non-admin routes
-  const adminRoutes = routes.filter(route => route.isAdmin);
-  const regularRoutes = routes.filter(route => !route.isAdmin);
+  const adminRoutes = routes.filter((route) => route.isAdmin);
+  const regularRoutes = routes.filter((route) => !route.isAdmin);
 
   return (
     <Routes>
       {/* Render regular routes with AuthLayout */}
       {regularRoutes.map(({ component: Component, path, exact }, index) => (
-        <Route key={index} path={path} exact={exact} element={<AuthLayout><Component /></AuthLayout>} />
+        <Route
+          key={index}
+          path={path}
+          exact={exact}
+          element={
+            <AuthLayout>
+              <Component />
+            </AuthLayout>
+          }
+        />
       ))}
 
       {/* Render admin routes with AdminLayout and AdminRoute */}
       {adminRoutes.map(({ component: Component, path, exact }, index) => (
-        <Route key={index} path={path} exact={exact} element={
-          <AdminLayout>
-            <AdminRoute>
-              <Component />
-            </AdminRoute>
-          </AdminLayout>
-        } />
+        <Route
+          key={index}
+          path={path}
+          exact={exact}
+          element={
+            <AdminLayout>
+              <AdminRoute>
+                <Component />
+              </AdminRoute>
+            </AdminLayout>
+          }
+        />
       ))}
     </Routes>
   );

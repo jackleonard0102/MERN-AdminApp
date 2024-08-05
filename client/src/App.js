@@ -13,7 +13,6 @@ import {
 import { HappyProvider } from '@ant-design/happy-work-theme';
 import themeOverrides from "./config/themeOverrides";
 import Login from "./container/pages/Auth/Login";
-import Register from "./container/pages/Auth/Register";
 import ResetPassword from "./container/pages/Auth/ResetPassword";
 import PrivateRoute from "./container/routes/PrivateRoute";
 import ProtectedRoutes from "./container/routes/ProtectedRoutes";
@@ -59,7 +58,6 @@ const App = () => {
               <Routes>
                 <Route element={<PublicRoute />}>
                   <Route exact path="/login" element={<Login />} />
-                  <Route exact path="/register" element={<Register />} />
                   <Route exact path="/reset-password/:token" element={<ResetPassword />} />
                 </Route>
                 <Route element={<PrivateRoute />}>

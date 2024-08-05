@@ -19,12 +19,12 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    avatar: {
+    logo: {
       type: String,
     },
     permission: {
       type: Number,
-      default: 2,
+      default: 2, // 1 for admin, 2 for regular user
     },
     socketId: {
       type: [String],
