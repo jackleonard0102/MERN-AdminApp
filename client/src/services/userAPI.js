@@ -3,7 +3,7 @@ import { getRequest, postRequest, putRequest, deleteRequest, postRequestWithFile
 
 export const getAllUsers = async (query) => {
   try {
-    const response = await getRequest('users', query); // Ensure the URL is correct
+    const response = await getRequest('users', { ...query, excludePermission: 1 }); // Adding excludePermission to query
     return response.data;
   } catch (error) {
     console.log('[GET users error]', error);
@@ -16,9 +16,9 @@ export const getAllUsers = async (query) => {
 
 export const updateUserStatus = async (userId, status) => {
   try {
-    await putRequest(`users/${userId}/status`, { status }); // Ensure the URL is correct
+    await putRequest(`users/${userId}/status`, status); // Ensure the URL is correct
   } catch (error) {
-    console.error('[UPDATE user status error]', error);
+    console.error('[UPDATE user status error]', error.response || error); // Log the response error
     throw error;
   }
 };

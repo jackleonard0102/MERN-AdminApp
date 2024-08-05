@@ -42,7 +42,7 @@ const routes = [
     exact: true,
   },
   {
-    path: 'user/profile',
+    path: 'admin/profile',
     component: lazy(() => import('../pages/Profile/Edit')),
     exact: true,
     isAdmin: true,
@@ -50,12 +50,6 @@ const routes = [
   {
     path: 'admin/users',
     component: lazy(() => import('../pages/Admin/Users')),
-    exact: true,
-    isAdmin: true,
-  },
-  {
-    path: 'admin/logo',
-    component: lazy(() => import('../pages/Admin/Logo')),
     exact: true,
     isAdmin: true,
   },

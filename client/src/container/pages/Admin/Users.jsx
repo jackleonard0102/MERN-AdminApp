@@ -1,5 +1,5 @@
 // Users.jsx
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Button,
   Col,
@@ -18,19 +18,19 @@ import {
   Select,
   Upload,
   Spin,
-} from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import constants from "../../../config/constants";
-import { updatePageState } from "../../../redux/user/userSlice";
-import { getStorage } from "../../../helpers";
+} from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import constants from '../../../config/constants';
+import { updatePageState } from '../../../redux/user/userSlice';
+import { getStorage } from '../../../helpers';
 import {
   getAllUsers,
   updateUserStatus,
   updateUserDetails,
   deleteUser,
   createUser,
-} from "../../../services/userAPI";
-import ImgCrop from "antd-img-crop";
+} from '../../../services/userAPI';
+import ImgCrop from 'antd-img-crop';
 
 const { Search } = Input;
 const { Content } = Layout;
@@ -54,13 +54,13 @@ function Users() {
 
   const columns = [
     {
-      title: "No",
-      dataIndex: "_id",
-      key: "no",
-      width: "70px",
+      title: 'No',
+      dataIndex: '_id',
+      key: 'no',
+      width: '70px',
       render: (_, row, index) => (
         <>
-          {(page - 1) * pageSize + index + 1}{" "}
+          {(page - 1) * pageSize + index + 1}{' '}
           {row.socketId.length > 0 ? (
             <Badge status="success" />
           ) : (
@@ -70,19 +70,19 @@ function Users() {
       ),
     },
     {
-      title: "Profile",
-      dataIndex: "name",
-      key: "name",
+      title: 'Profile',
+      dataIndex: 'name',
+      key: 'name',
       render: (_, row) => (
         <div className="flex items-center">
-          <Avatar
+          {/* <Avatar
             size="large"
             src={
-              row.avatar
-                ? `${constants.SOCKET_URL}${row.avatar}`
-                : "/imgs/avatar.png"
+              row.logo
+                ? `${constants.SOCKET_URL}${row.logo}`
+                : '/imgs/logo.jpg'
             }
-          />
+          /> */}
           <div className="ml-2">
             <b>{row.name}</b>
             <br />
@@ -92,10 +92,10 @@ function Users() {
       ),
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      align: "center",
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
       render: (_, row) => (
         <Switch
           checked={row.status === 1}
@@ -104,16 +104,27 @@ function Users() {
       ),
     },
     {
-      title: "Permission",
-      dataIndex: "permission",
-      key: "permission",
-      align: "center",
-      render: (permission) => (permission === 1 ? "Admin" : "User"),
+      title: 'Permission',
+      dataIndex: 'permission',
+      key: 'permission',
+      align: 'center',
+      render: (permission) => {
+        switch (permission) {
+          case 2:
+            return 'Office Manager';
+          case 3:
+            return 'Office Clerk';
+          case 4:
+            return 'Field Clerk';
+          default:
+            return 'Unknown';
+        }
+      },
     },
     {
-      title: "Action",
-      key: "action",
-      align: "center",
+      title: 'Action',
+      key: 'action',
+      align: 'center',
       render: (_, row) => (
         <Space size="middle">
           <Button
@@ -143,7 +154,7 @@ function Users() {
           if (data.users) {
             setUsers(
               data.users
-                .filter((user) => user.status !== 2)
+                .filter((user) => user.status !== 2 && user.permission !== 1) // Filter out admins
                 .map((user) => ({ ...user, key: user._id }))
             );
             setTotal(data.total);
@@ -155,13 +166,13 @@ function Users() {
               })
             );
           } else {
-            console.error("No users found in response:", data); // Add this line
+            console.error('No users found in response:', data); // Add this line
           }
         })
         .catch((error) => {
           setLoading(false);
-          console.error("Error fetching users:", error);
-          message.error("Failed to fetch users"); // Display an error message to the user
+          console.error('Error fetching users:', error);
+          message.error('Failed to fetch users'); // Display an error message to the user
         });
     },
     [dispatch, page, pageSize]
@@ -185,29 +196,34 @@ function Users() {
   };
 
   const handleStatusChange = async (userId, currentStatus) => {
-    const newStatus = currentStatus === 1 ? 0 : 1;
-    await updateUserStatus(userId, { status: newStatus });
-    getUsers();
+    const newStatus = currentStatus == 1 ? 0 : 1;
+    try {
+      await updateUserStatus(userId, { status: newStatus });
+      getUsers();
+    } catch (error) {
+      console.error('Failed to update user status', error);
+      message.error('Failed to update user status');
+    }
   };
 
   const handleCreate = async () => {
     try {
       const values = await createForm.validateFields();
       const formData = new FormData();
-      if (values.avatar && values.avatar.file) {
-        formData.append("avatar", values.avatar.file.originFileObj);
+      if (values.logo && values.logo.file) {
+        formData.append('logo', values.logo.file.originFileObj);
       }
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
-      formData.append("permission", values.permission === "admin" ? 1 : 2);
+      formData.append('name', values.name);
+      formData.append('email', values.email);
+      formData.append('password', values.password);
+      formData.append('permission', parseInt(values.permission, 10)); // Updated
 
       await createUser(formData);
       setIsCreateModalVisible(false);
       getUsers();
-      message.success("User created successfully");
+      message.success('User created successfully');
     } catch (error) {
-      message.error("Failed to create user");
+      message.error('Failed to create user');
     }
   };
 
@@ -215,29 +231,29 @@ function Users() {
     try {
       const values = await form.validateFields();
       const formData = new FormData();
-      if (values.avatar && values.avatar.file) {
-        formData.append("avatar", values.avatar.file.originFileObj);
+      if (values.logo && values.logo.file) {
+        formData.append('logo', values.logo.file.originFileObj);
       }
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("permission", values.permission === "admin" ? 1 : 2);
+      formData.append('name', values.name);
+      formData.append('email', values.email);
+      formData.append('permission', parseInt(values.permission, 10)); // Updated
 
       await updateUserDetails(selectedUser._id, formData);
       setIsUpdateModalVisible(false);
       getUsers();
-      message.success("User updated successfully");
+      message.success('User updated successfully');
     } catch (error) {
-      message.error("Failed to update user");
+      message.error('Failed to update user');
     }
   };
 
   const showDeleteModal = (userId) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this user?",
-      content: "This action cannot be undone.",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
+      title: 'Are you sure you want to delete this user?',
+      content: 'This action cannot be undone.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
       onOk: () => handleDelete(userId),
     });
   };
@@ -246,33 +262,33 @@ function Users() {
     try {
       await deleteUser(userId);
       getUsers();
-      message.success("User deleted successfully");
+      message.success('User deleted successfully');
     } catch (error) {
-      message.error("Failed to delete user");
+      message.error('Failed to delete user');
     }
   };
 
   const beforeUpload = (file) => {
     const isJpgOrPng =
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "image/webp";
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/webp';
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG/WEBP file!");
+      message.error('You can only upload JPG/PNG/WEBP file!');
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error("Image must be smaller than 2MB!");
+      message.error('Image must be smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
   };
 
   const handleFileChange = (info, setImageUrl, setLoading) => {
-    if (info.file.status === "uploading") {
+    if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
-    if (info.file.status === "done") {
+    if (info.file.status === 'done') {
       setImageUrl(info.file.response?.path);
       setLoading(false);
     }
@@ -281,12 +297,12 @@ function Users() {
   const showUpdateModal = (user) => {
     setSelectedUser(user);
     form.setFieldsValue({
-      avatar: user.avatar,
+      logo: user.logo,
       name: user.name,
       email: user.email,
-      permission: user.permission === 1 ? "admin" : "user",
+      permission: user.permission.toString(), // Convert permission to string
     });
-    setImageUrl(user.avatar); // Set the initial avatar URL
+    setImageUrl(user.logo); // Set the initial logo URL
     setIsUpdateModalVisible(true);
   };
 
@@ -334,24 +350,24 @@ function Users() {
         onOk={handleCreate}
       >
         <Form form={createForm} layout="vertical">
-          <Form.Item
-            name="avatar"
+          {/* <Form.Item
+            name="logo"
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
-            rules={[{ required: false }]} // Change to required false
+            rules={[{ required: false }]}
           >
             <ImgCrop rotationSlider>
               <Upload
                 name="file"
                 listType="picture-circle"
-                className="avatar-uploader"
+                className="logo-uploader"
                 multiple={false}
                 showUploadList={false}
                 action={`${constants.HOST_URL}users/upload`}
                 accept="image/*"
                 headers={{
-                  Authorization: getStorage("token"),
+                  Authorization: getStorage('token'),
                 }}
                 beforeUpload={beforeUpload}
                 onChange={(info) =>
@@ -366,9 +382,9 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : "/imgs/avatar.png"
+                          : '/imgs/logo.jpg'
                       }
-                      alt="avatar"
+                      alt="logo"
                       className="w-full rounded-full"
                     />
                     <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
@@ -378,36 +394,37 @@ function Users() {
                 )}
               </Upload>
             </ImgCrop>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="name"
             label="Name"
-            rules={[{ required: true, message: "Please enter the name" }]}
+            rules={[{ required: true, message: 'Please enter the name' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
-            rules={[{ required: true, message: "Please enter the email" }]}
+            rules={[{ required: true, message: 'Please enter the email' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="password"
             label="Password"
-            rules={[{ required: true, message: "Please enter the password" }]}
+            rules={[{ required: true, message: 'Please enter the password' }]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item
             name="permission"
             label="Permission"
-            rules={[{ required: true, message: "Please select a permission" }]}
+            rules={[{ required: true, message: 'Please select a permission' }]}
           >
             <Select placeholder="Select permission">
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
+              <Option value="2">Office Manager</Option>
+              <Option value="3">Office Clerk</Option>
+              <Option value="4">Field Clerk</Option>
             </Select>
           </Form.Item>
         </Form>
@@ -422,8 +439,8 @@ function Users() {
         onOk={handleUpdate}
       >
         <Form form={form} layout="vertical">
-          <Form.Item
-            name="avatar"
+          {/* <Form.Item
+            name="logo"
             label="Avatar"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.file)}
@@ -432,13 +449,13 @@ function Users() {
               <Upload
                 name="file"
                 listType="picture-circle"
-                className="avatar-uploader"
+                className="logo-uploader"
                 multiple={false}
                 showUploadList={false}
                 action={`${constants.HOST_URL}users/upload`}
                 accept="image/*"
                 headers={{
-                  Authorization: getStorage("token"),
+                  Authorization: getStorage('token'),
                 }}
                 beforeUpload={beforeUpload}
                 onChange={(info) =>
@@ -453,9 +470,9 @@ function Users() {
                       src={
                         imageUrl
                           ? `${constants.SOCKET_URL}${imageUrl}`
-                          : "/imgs/avatar.png"
+                          : '/imgs/logo.jpg'
                       }
-                      alt="avatar"
+                      alt="logo"
                       className="w-full rounded-full"
                     />
                     <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
@@ -465,29 +482,30 @@ function Users() {
                 )}
               </Upload>
             </ImgCrop>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="name"
             label="Name"
-            rules={[{ required: true, message: "Please enter the name" }]}
+            rules={[{ required: true, message: 'Please enter the name' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
-            rules={[{ required: true, message: "Please enter the email" }]}
+            rules={[{ required: true, message: 'Please enter the email' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="permission"
             label="Permission"
-            rules={[{ required: true, message: "Please select a permission" }]}
+            rules={[{ required: true, message: 'Please select a permission' }]}
           >
             <Select placeholder="Select permission">
-              <Option value="admin">Admin</Option>
-              <Option value="user">User</Option>
+              <Option value="2">Office Manager</Option>
+              <Option value="3">Office Clerk</Option>
+              <Option value="4">Field Clerk</Option>
             </Select>
           </Form.Item>
         </Form>

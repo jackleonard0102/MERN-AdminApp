@@ -5,7 +5,7 @@ const { _log, _error } = require("../utils/logging");
 
 exports.getUsers = async (req, res) => {
   try {
-    let { page, limit, name, email, utm_source, utm_campaign } = req.query;
+    let { page, limit, name, email } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
     const skip = (page - 1) * limit;
@@ -32,24 +32,24 @@ exports.createUser = async (req, res) => {
     let permissionValue;
 
     // Check permission value and assign accordingly
-    if (permission === 'Admin') {
-      permissionValue = 1;
-    } else if (permission === 'User') {
+    if (permission == 2) {
       permissionValue = 2;
+    } else if (permission == 3) {
+      permissionValue = 3;
+    } else if (permission == 4) {
+      permissionValue = 4;
     } else {
       return res.status(400).json({ success: false, message: 'Invalid permission value' });
     }
 
-    // Create new user instance with the mapped permission value
-    const user = new User ({
+    const user = new User({
       name,
       email,
       password,
-      permission: permissionValue,
-      avatar: req.file?.path
+      permission,
+      logo: req.file?.path
     });
 
-    // Save user to the database
     await user.save();
     return res.status(201).json({ success: true, message: 'User created successfully' });
   } catch (error) {
@@ -57,7 +57,6 @@ exports.createUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 exports.updateUserDetails = async (req, res) => {
   try {
@@ -67,21 +66,21 @@ exports.updateUserDetails = async (req, res) => {
     // Map permission field if present
     if (updateData.permission) {
       const permission = updateData.permission.toLowerCase();
-      if (permission === 'Admin') {
-        updateData.permission = 1;
-      } else if (permission === 'User') {
+      if (permission == 2) {
         updateData.permission = 2;
+      } else if (permission == 3) {
+        updateData.permission = 3;
+      } else if (permission == 4) {
+        updateData.permission = 4;
       } else {
         return res.status(400).json({ success: false, message: 'Invalid permission value' });
       }
     }
 
-    // Update avatar path if file is present
     if (req.file) {
-      updateData.avatar = req.file.path.replace(/\\/g, '/').replace('public/', '/');
+      updateData.logo = req.file.path.replace(/\\/g, '/').replace('public/', '');
     }
 
-    // Update user details in the database
     const user = await User.findByIdAndUpdate(userId, updateData, { new: true });
 
     if (!user) {
@@ -95,16 +94,17 @@ exports.updateUserDetails = async (req, res) => {
   }
 };
 
-
 exports.updateUserStatus = async (req, res) => {
   try {
     const { userId } = req.params;
     const { status } = req.body;
+
     await User.findByIdAndUpdate(userId, { status });
-    return res.status(200).json({ success: true, message: 'User status updated successfully' });
+
+    res.status(200).json({ message: 'User status updated successfully' });
   } catch (error) {
-    _error(error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error('Error updating user status:', error);
+    res.status(500).json({ message: 'Error updating user status', error });
   }
 };
 
@@ -179,8 +179,7 @@ exports.upload = async (req, res) => {
   try {
     const file = req.file;
     const oldFile = req.body.oldFile;
-    if (oldFile) delFile(`public${oldFile}`);
-    req.user.avatar = file.path.replace(/\\/g, '/').replace('public/', '/');
+    req.user.logo = file.path.replace(/\\/g, '/').replace('public/', '/');
     await req.user.save();
     return res.json({
       success: true,
@@ -199,8 +198,8 @@ exports.getUser = async (req, res) => {
       _id: req.user._id,
       email: req.user.email,
       name: req.user.name,
-      avatar: req.user.avatar,
-      isAdmin: req.user.permission === 1,
+      logo: req.user.logo,
+      isAdmin: req.user.permission == 1,
     };
     return res.json({ success: true, user });
   } catch (error) {

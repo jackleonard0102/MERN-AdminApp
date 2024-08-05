@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { Button, FloatButton, Layout, Modal } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
+import React, { useEffect } from 'react';
+import { Button, FloatButton, Layout, Modal } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 import {
   ArrowLeftOutlined,
@@ -13,16 +13,16 @@ import {
   FileAddOutlined,
   MoonFilled,
   PlusOutlined,
-} from "@ant-design/icons";
-import ScrollToTop from "react-scroll-to-top";
+} from '@ant-design/icons';
+import ScrollToTop from 'react-scroll-to-top';
 
-import constants from "../../config/constants";
-import UserMenu from "./partials/UserMenu";
-import { setDarkMode, setOpenPayModal } from "../../redux/app/appSlice";
+import constants from '../../config/constants';
+import UserMenu from './partials/UserMenu';
+import { setDarkMode, setOpenPayModal } from '../../redux/app/appSlice';
 
-import LogoSrc from "../../assets/images/logo.png";
-import smLogoSrc from "../../assets/images/logo-sm.png";
-import Settings from "./partials/Settings";
+import LogoSrc from '../../assets/images/logo.png';
+import smLogoSrc from '../../assets/images/logo-sm.png';
+import Settings from './partials/Settings';
 
 const { Header } = Layout;
 
@@ -44,15 +44,15 @@ function AdminLayout({ children }) {
       <Layout className="min-h-screen">
         <Header
           className={classNames(
-            "shadow sticky px-0 top-0 z-[999]",
-            !isDarkMode && "bg-white"
+            'shadow sticky px-0 top-0 z-[999]',
+            !isDarkMode && 'bg-white'
           )}
         >
           <div className="flex items-center justify-between px-2 max-w-7xl mx-auto">
             <div
               className={classNames(
-                "demo-logo h-[64px] mb-2",
-                !isDarkMode && "bg-white"
+                'demo-logo h-[64px] mb-2',
+                !isDarkMode && 'bg-white'
               )}
             >
               <Link to="/admin/users" className="hidden sm:inline">

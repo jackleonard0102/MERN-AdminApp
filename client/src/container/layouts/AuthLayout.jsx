@@ -1,161 +1,132 @@
-import React, { useState, useEffect } from "react";
-import { Button, Layout, Menu, Dropdown } from "antd";
-import { Link, useLocation } from "react-router-dom"; // Add useLocation
-import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
-import { DownOutlined, MenuOutlined } from "@ant-design/icons";
-import UserMenu from "./partials/UserMenu";
-import { setDarkMode } from "../../redux/app/appSlice";
-import LogoSrc from "../../assets/images/logo.png";
-import smLogoSrc from "../../assets/images/logo-sm.png";
-import Settings from "./partials/Settings";
+import React, { useState, useEffect } from 'react';
+import { Button, Layout, Menu, Drawer } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
+import {
+  DashboardOutlined,
+  EditOutlined,
+  FileTextOutlined,
+  SearchOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+  MenuOutlined,
+  LogoutOutlined,
+} from '@ant-design/icons';
+import UserMenu from './partials/UserMenu';
+import LogoSrc from '../../assets/images/logo.png';
+import smLogoSrc from '../../assets/images/logo-sm.png';
+import Settings from './partials/Settings';
+import { logout } from '../../redux/auth/authSlice';
 
 const { Header } = Layout;
 
-const newEntryMenu = (
-  <Menu>
-    <Menu.Item key="personal">
-      <Link to="/new-entry/personal">Personal</Link>
-    </Menu.Item>
-    <Menu.Item key="business">
-      <Link to="/new-entry/business">Business</Link>
-    </Menu.Item>
-  </Menu>
-);
-
-const recommendationsMenu = (
-  <Menu>
-    <Menu.Item key="personal">
-      <Link to="/recommendations/personal">Personal</Link>
-    </Menu.Item>
-    <Menu.Item key="business">
-      <Link to="/recommendations/business">Business</Link>
-    </Menu.Item>
-    <Menu.Item key="general">
-      <Link to="/recommendations/general">General</Link>
-    </Menu.Item>
-  </Menu>
-);
-
 function AuthLayout({ children }) {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.app.isDarkMode);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const location = useLocation(); // Add useLocation
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
-  useEffect(() => {
-    setMenuVisible(false); // Reset menu visibility on route change
-  }, [location.pathname]); // Dependency on location.pathname
+  const dispatch = useDispatch();
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
+  const showDrawer = () => {
+    setDrawerVisible(true);
   };
+
+  const onClose = () => {
+    setDrawerVisible(false);
+  };
+
+  const menuItems = [
+    {
+      label: 'Dashboard',
+      key: '/dashboard',
+      icon: <DashboardOutlined />,
+    },
+    {
+      label: 'Search',
+      key: '/search',
+      icon: <SearchOutlined />,
+    },
+    {
+      label: 'New Entry',
+      key: 'sub1',
+      children: [
+        {
+          key: '/new-entry/personal',
+          label: 'Personal',
+          icon: <UserAddOutlined />,
+        },
+        {
+          key: '/new-entry/business',
+          label: 'Business',
+          icon: <UsergroupAddOutlined />,
+        },
+      ],
+    },
+    {
+      label: 'Recommendation',
+      key: 'sub2',
+      children: [
+        {
+          key: '/recommendations/general',
+          label: 'General',
+          icon: <EditOutlined />,
+        },
+        {
+          key: '/recommendations/personal',
+          label: 'Personal',
+          icon: <UserAddOutlined />,
+        },
+        {
+          key: '/recommendations/business',
+          label: 'Business',
+          icon: <UsergroupAddOutlined />,
+        },
+      ],
+    },
+    {
+      label: 'Report',
+      key: '/reports',
+      icon: <FileTextOutlined />,
+    },
+    {
+      label: 'Logout',
+      key: '/logout',
+      icon: <LogoutOutlined />,
+    },
+  ];
 
   return (
     <>
       <Layout className="min-h-screen">
         <Header
-          className={classNames(
-            "shadow sticky top-0 z-[999] transition-colors duration-300",
-            {
-              "bg-white text-black": !isDarkMode,
-              "bg-gray-900 text-white": isDarkMode,
-            }
-          )}
+          className={classNames('shadow sticky top-0 z-[999]', {
+            'bg-white text-black': !isDarkMode,
+            //   'bg-gray-900 text-white': isDarkMode,
+          })}
         >
-          <div className="flex items-center justify-between px-2 max-w-7xl mx-auto">
-            <div
-              className={classNames("demo-logo h-[64px] mb-2", {
-                "bg-white": !isDarkMode,
-                "bg-gray-900": isDarkMode,
-              })}
-            >
+          <div className="flex items-center max-w-7xl mx-auto w-full">
+            <div className={classNames('h-16')}>
               <Link to="/dashboard" className="hidden sm:inline">
-                <img src={LogoSrc} alt="logo" className="w-[64px] p-3" />
+                <img src={LogoSrc} alt="logo" className="h-16 p-3" />
               </Link>
               <Link to="/dashboard" className="inline sm:hidden">
-                <img src={smLogoSrc} alt="logo" className="w-[64px] p-3" />
+                <img src={smLogoSrc} alt="logo" className="h-16 p-3" />
               </Link>
             </div>
-            <div className="flex items-center sm:hidden">
-              <Button type="text" icon={<MenuOutlined />} onClick={toggleMenu} />
-            </div>
-            <div
-              className={classNames("flex items-center space-x-4", {
-                "hidden sm:flex": !menuVisible,
-                "flex flex-col sm:flex-row": menuVisible,
-              })}
-            >
-              <Menu
-                mode="horizontal"
-                className={classNames(
-                  "bg-transparent border-b-0 w-full sm:w-auto",
-                  {
-                    "text-black": !isDarkMode,
-                    "text-white": isDarkMode,
-                  }
-                )}
-              >
-                <Menu.Item
-                  key="dashboard"
-                  className="hover:bg-transparent"
-                  style={{ marginRight: "15px" }}
-                >
-                  <Link to="/dashboard">Dashboard</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="search"
-                  className="hover:bg-transparent"
-                  style={{ marginRight: "15px" }}
-                >
-                  <Link to="/search">Search</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="new-entry"
-                  className="hover:bg-transparent"
-                  style={{ marginRight: "15px" }}
-                >
-                  <Dropdown
-                    overlay={newEntryMenu}
-                    overlayClassName={classNames({
-                      "bg-white text-black": !isDarkMode,
-                      "bg-gray-900 text-white": isDarkMode,
-                    })}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      New Entry <DownOutlined />
-                    </a>
-                  </Dropdown>
-                </Menu.Item>
-                <Menu.Item
-                  key="recommendations"
-                  className="hover:bg-transparent"
-                  style={{ marginRight: "15px" }}
-                >
-                  <Dropdown
-                    overlay={recommendationsMenu}
-                    overlayClassName={classNames({
-                      "bg-white text-black": !isDarkMode,
-                      "bg-gray-900 text-white": isDarkMode,
-                    })}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      Recommendations <DownOutlined />
-                    </a>
-                  </Dropdown>
-                </Menu.Item>
-                <Menu.Item
-                  key="reports"
-                  className="hover:bg-transparent"
-                  style={{ marginRight: "15px" }}
-                >
-                  <Link to="/reports">Reports</Link>
-                </Menu.Item>
-              </Menu>
-              <div className="ml-4">
-                <UserMenu />
-              </div>
-            </div>
+            <Menu
+              mode="horizontal"
+              theme={isDarkMode ? 'dark' : 'light'}
+              defaultSelectedKeys={['2']}
+              items={menuItems}
+              className={classNames('flex-1 min-w-0 flex justify-end')}
+              onClick={({ key }) => {
+                if (key == '/logout') {
+                  return dispatch(logout());
+                }
+                navigate(key);
+              }}
+            />
           </div>
         </Header>
         <Layout>{children}</Layout>

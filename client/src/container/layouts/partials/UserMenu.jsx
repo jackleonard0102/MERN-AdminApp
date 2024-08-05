@@ -1,8 +1,14 @@
 import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Dropdown } from 'antd';
-import { LockOutlined, UserOutlined, HighlightOutlined, IdcardOutlined, SafetyOutlined } from '@ant-design/icons';
+import {
+  LockOutlined,
+  UserOutlined,
+  IdcardOutlined,
+  SafetyOutlined,
+} from '@ant-design/icons';
 
 import { logout } from '../../../redux/auth/authSlice';
 import constants from '../../../config/constants';
@@ -10,7 +16,14 @@ import constants from '../../../config/constants';
 const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
+
+  const [refreshKey, setRefreshKey] = useState(0); // Initialize with 0 or any value
+
+  // Function to update the key and force refresh
+  const refreshImage = () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
 
   const items = [
     {
@@ -21,38 +34,49 @@ const UserMenu = () => {
   ];
 
   if (user.isAdmin) {
-    items.unshift(
-      {
-        label: <div className='flex items-center'><Avatar size="large" src={user.avatar ? `${constants.SOCKET_URL}${user.avatar}` : '/imgs/avatar.png'} /><div className='ml-1'>{user.name}<br />{user.email}</div></div>,
-        key: 'user',
-        type: 'group',
-        children: [
-          {
-            label: 'Profile',
-            key: '/user/profile',
-            icon: <IdcardOutlined />,
-          },
-          {
-            label: 'Admin',
-            key: 'admin',
-            type: 'group',
-            icon: <SafetyOutlined />,
-            children: [
-              {
-                label: 'Users',
-                key: '/admin/users',
-                icon: <UserOutlined />,
-              },
-              {
-                label: 'Logo',
-                key: '/admin/logo',
-                icon: <HighlightOutlined />,
-              },
-            ],
-          },
-        ],
-      },
-    );
+    items.unshift({
+      label: (
+        <div className="flex items-center">
+          <Avatar
+            size="large"
+            src={
+              user.logo
+                ? `${constants.SOCKET_URL}${
+                    user.logo
+                  }?reload=${new Date().getTime()}`
+                : '/imgs/logo.jpg'
+            }
+          />
+          <div className="ml-1">
+            {user.name}
+            <br />
+            {user.email}
+          </div>
+        </div>
+      ),
+      key: 'user',
+      type: 'group',
+      children: [
+        {
+          label: 'Profile',
+          key: '/admin/profile',
+          icon: <IdcardOutlined />,
+        },
+        {
+          label: 'Admin',
+          key: 'admin',
+          type: 'group',
+          icon: <SafetyOutlined />,
+          children: [
+            {
+              label: 'Users',
+              key: '/admin/users',
+              icon: <UserOutlined />,
+            },
+          ],
+        },
+      ],
+    });
   }
 
   const handleClick = ({ item, key }) => {
@@ -73,7 +97,10 @@ const UserMenu = () => {
       placement="bottomLeft"
       arrow
     >
-      <Avatar src={user.avatar ? `${constants.SOCKET_URL}${user.avatar}` : '/imgs/avatar.png'} className='shadow-lg cursor-pointer' />
+      <Avatar
+        src={`http://localhost:5000/upload/logo.png?reload=${new Date().getTime()}`}
+        className="shadow-lg cursor-pointer"
+      />
     </Dropdown>
   );
 };
