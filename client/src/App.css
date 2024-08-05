@@ -2,8 +2,8 @@
 
 /* Custom CSS */
 .ant-menu-horizontal .ant-menu-item {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .ant-menu-horizontal .ant-menu-item::after {

@@ -74,7 +74,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24}>
+              <Row gutter={24, 24}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -172,7 +172,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24}>
+              <Row gutter={24, 24}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -270,7 +270,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24}>
+              <Row gutter={24, 24}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -299,6 +299,76 @@ function PersonalEntry() {
                     </Select>
                   </Form.Item>
                 </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="First Name"
+                    name="FirstName"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your firstname!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Second Name"
+                    name="SecondName"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your secondname!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Surname"
+                    name="Surname"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your surname!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="ID Number"
+                    name="ID_Number"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your ID number!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Panel>
+
+          <Panel header="Land Details" className="text-start" key="4">
+            <Form
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+            >
+              <Row gutter={24, 24}>
                 <Col span={12}>
                   <Form.Item
                     label="First Name"
@@ -526,7 +596,34 @@ function PersonalEntry() {
               </Row>
             </Form>
           </Panel>
+
+          <Panel header="Endorsements" className="text-start" key="5">
+            <Form
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+            >
+              <Row gutter={24, 24}>
+                <Col span={24}>
+                  <TextArea
+                    showCount
+                    maxLength={1000}
+                    onChange={onChange}
+                    placeholder="Note ..."
+                    style={{
+                      height: 120,
+                      resize: 'none',
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Form>
+          </Panel>
         </Collapse>
+
         <Form
           labelCol={{
             span: 8,
@@ -535,7 +632,7 @@ function PersonalEntry() {
             span: 16,
           }}
         >
-          <Row className="mt-5" gutter={24}>
+          <Row className="my-5" gutter={24}>
             <Col span={12}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
@@ -549,18 +646,6 @@ function PersonalEntry() {
           </Row>
         </Form>
 
-        <div className="my-6">
-          <TextArea
-            showCount
-            maxLength={1000}
-            onChange={onChange}
-            placeholder="Note ..."
-            style={{
-              height: 120,
-              resize: 'none',
-            }}
-          />
-        </div>
         <div className="flex justify-center">
           <Button className="mx-3" type="primary">
             Save
