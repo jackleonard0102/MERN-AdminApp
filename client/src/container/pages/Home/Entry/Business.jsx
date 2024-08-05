@@ -137,9 +137,6 @@ function BusinessEntry() {
               }}
             >
               <Row gutter={24}>
-                <Col span={24}>
-                  <Divider orientation="left"> Joint Member </Divider>
-                </Col>
                 <Col span={12}>
                   <Form.Item
                     name="BusinessType"
@@ -186,34 +183,20 @@ function BusinessEntry() {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Stand Number"
-                    name="StandNumber"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your stand number!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="LandUse"
-                    label="Land Use"
-                    rules={[
-                      { required: true, message: 'Please select Land Use' },
-                    ]}
-                  >
-                    <Select placeholder="Select Land Use">
-                      <Option value="Yes">Yes</Option>
-                      <Option value="No">No</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
+              </Row>
+            </Form>
+          </Panel>
+
+          <Panel header="Land Details" className="text-start" key="3">
+            <Form
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+            >
+              <Row gutter={24}>
                 <Col span={12}>
                   <Form.Item
                     label="Latitude, Longtitude"
@@ -329,25 +312,49 @@ function BusinessEntry() {
               </Row>
             </Form>
           </Panel>
+
+          <Panel header="Endorsements" className="text-start" key="4">
+            <Form
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
+            >
+              <Row gutter={24}>
+                <Col span={24}>
+                  <TextArea
+                    showCount
+                    maxLength={1000}
+                    onChange={onChange}
+                    placeholder="Note ..."
+                    style={{
+                      height: 120,
+                      resize: 'none',
+                    }}
+                  />
+                </Col>
+              </Row>
+            </Form>
+          </Panel>
         </Collapse>
 
         <Form className="mt-5">
-          <Row gutter={24}>
+          <Row className="mt-5 mb-8" gutter={24}>
             <Col span={8}>
               <Upload {...props}>
-                <Button icon={<UploadOutlined />}>
-                  Registration Certificate
-                </Button>
+                <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
+              </Upload>
+            </Col>
+            <Col span={8}>
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Business Registration</Button>
               </Upload>
             </Col>
             <Col span={8}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>Authority Letter</Button>
-              </Upload>
-            </Col>
-            <Col span={8}>
-              <Upload {...props}>
-                <Button icon={<UploadOutlined />}>ID Copy</Button>
               </Upload>
             </Col>
           </Row>
@@ -373,10 +380,6 @@ function BusinessEntry() {
 
           <Button className="mx-3" type="primary">
             Clear
-          </Button>
-
-          <Button className="mx-3" type="primary">
-            Add Joint Member
           </Button>
         </div>
       </Content>

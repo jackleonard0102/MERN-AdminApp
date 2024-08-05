@@ -44,15 +44,16 @@ function Login() {
   return (
     <GuestLayout>
       <Card className="w-[400px] shadow-lg">
-        <div className="flex justify-center items-center text-center my-4">
+        <div className="flex justify-center items-center text-center my-1">
           <Image
             className="mb-5 rounded-full"
             width={100}
             src={`http://localhost:5000/upload/logo.png?${refreshKey}`} // Append refreshKey as query parameter
+            preview={false}
           />
-          <Title className="ml-5" level={3}>
-            Log In
-          </Title>
+        </div>
+        <div className="flex justify-center items-center text-center my-1">
+          <Title level={3}>Log In</Title>
         </div>
         <Form
           name="login_form"

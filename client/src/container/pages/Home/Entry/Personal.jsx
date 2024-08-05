@@ -74,7 +74,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24, 24}>
+              <Row gutter={(24, 24)}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -172,7 +172,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24, 24}>
+              <Row gutter={(24, 24)}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -270,7 +270,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24, 24}>
+              <Row gutter={(24, 24)}>
                 <Col span={12}>
                   <Form.Item
                     name="Gender"
@@ -368,119 +368,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24, 24}>
-                <Col span={12}>
-                  <Form.Item
-                    label="First Name"
-                    name="FirstName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your firstname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Second Name"
-                    name="SecondName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your secondname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Surname"
-                    name="Surname"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your surname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="ID Number"
-                    name="ID_Number"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your ID number!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Stand Number"
-                    name="Stand_Number"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your Stand Number!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="Landuse"
-                    label="Land Use"
-                    rules={[
-                      { required: true, message: 'Please select Land Use' },
-                    ]}
-                  >
-                    <Select placeholder="Select Land Use">
-                      <Option value="Yes">Yes</Option>
-                      <Option value="No">No</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Address"
-                    name="Address"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your address!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Location"
-                    name="Location"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your location!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
+              <Row gutter={(24, 24)}>
                 <Col span={12}>
                   <Form.Item
                     label="Latitude, Longitude"
@@ -606,7 +494,7 @@ function PersonalEntry() {
                 span: 16,
               }}
             >
-              <Row gutter={24, 24}>
+              <Row gutter={24}>
                 <Col span={24}>
                   <TextArea
                     showCount
@@ -632,13 +520,13 @@ function PersonalEntry() {
             span: 16,
           }}
         >
-          <Row className="my-5" gutter={24}>
-            <Col span={12}>
+          <Row className="mt-5 mb-8" gutter={24}>
+            <Col span={8}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
               </Upload>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>Authority Letter</Button>
               </Upload>
@@ -652,12 +540,6 @@ function PersonalEntry() {
           </Button>
           <Button className="mx-3" type="primary">
             Clear
-          </Button>
-          <Button className="mx-3" type="primary">
-            Add Joint Member
-          </Button>
-          <Button className="mx-3" type="primary">
-            Add Beneficiary
           </Button>
         </div>
       </Content>
