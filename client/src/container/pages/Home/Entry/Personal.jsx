@@ -43,9 +43,31 @@ const props = {
 const onChange = (e) => {
   console.log('Change:', e.target.value);
 };
+const onFinish = async (values) => {
+  const formData = new FormData();
 
-const onFinish = (values) => {
-  console.log('Success:', values);
+  Object.keys(values).forEach((key) => {
+    if (values[key]) formData.append(key, values[key]);
+  });
+
+  const idCopies = document.querySelector('[name="idCopies"]').files[0];
+  const authorityLetter = document.querySelector('[name="authorityLetter"]')
+    .files[0];
+
+  if (idCopies) formData.append('idCopies', idCopies);
+  if (authorityLetter) formData.append('authorityLetter', authorityLetter);
+
+  try {
+    const response = await fetch('http://localhost:5000/api/personal-entry', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log('Success:', data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 };
 
 const onFinishFailed = (errorInfo) => {
@@ -67,12 +89,10 @@ function PersonalEntry() {
         <Collapse defaultActiveKey={['1']}>
           <Panel header="Member" className="text-start" key="1">
             <Form
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
               <Row gutter={(24, 24)}>
                 <Col span={12}>
@@ -165,12 +185,10 @@ function PersonalEntry() {
 
           <Panel header="Joint Member" className="text-start" key="2">
             <Form
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
               <Row gutter={(24, 24)}>
                 <Col span={12}>
@@ -263,12 +281,10 @@ function PersonalEntry() {
 
           <Panel header="Beneficiary" className="text-start" key="3">
             <Form
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
               <Row gutter={(24, 24)}>
                 <Col span={12}>
@@ -361,12 +377,10 @@ function PersonalEntry() {
 
           <Panel header="Land Details" className="text-start" key="4">
             <Form
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
               <Row gutter={(24, 24)}>
                 <Col span={12}>
@@ -487,12 +501,10 @@ function PersonalEntry() {
 
           <Panel header="Endorsements" className="text-start" key="5">
             <Form
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
               <Row gutter={24}>
                 <Col span={24}>
@@ -521,12 +533,12 @@ function PersonalEntry() {
           }}
         >
           <Row className="mt-5 mb-8" gutter={24}>
-            <Col span={8}>
+            <Col span={12}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
               </Upload>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Upload {...props}>
                 <Button icon={<UploadOutlined />}>Authority Letter</Button>
               </Upload>
