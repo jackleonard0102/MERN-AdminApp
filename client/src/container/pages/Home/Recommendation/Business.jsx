@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { UploadOutlined } from "@ant-design/icons";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { UploadOutlined } from '@ant-design/icons';
 import {
   Col,
   Divider,
@@ -16,21 +16,21 @@ import {
   Input,
   Select,
   Upload,
-} from "antd";
+} from 'antd';
 
 const props = {
-  name: "file",
-  action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+  name: 'file',
+  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
   headers: {
-    authorization: "authorization-text",
+    authorization: 'authorization-text',
   },
   onChange(info) {
-    if (info.file.status !== "uploading") {
+    if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
     }
-    if (info.file.status === "done") {
+    if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === "error") {
+    } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
@@ -41,15 +41,15 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 const onChange = (e) => {
-  console.log("Change:", e.target.value);
+  console.log('Change:', e.target.value);
 };
 
 const onFinish = (values) => {
-  console.log("Success:", values);
+  console.log('Success:', values);
 };
 
 const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
+  console.log('Failed:', errorInfo);
 };
 
 function BusinessRecommendation() {
@@ -77,7 +77,7 @@ function BusinessRecommendation() {
           </div>
           <p>Subject : TO WHOM IT MAY CONCERN</p>
           <p className="mb-4">
-            I, the undersigned in my capacity as{" "}
+            I, the undersigned in my capacity as{' '}
             <Input
               placeholder="Enter Capacity"
               className="inline-block w-60 mx-2"
@@ -93,32 +93,28 @@ function BusinessRecommendation() {
             <p>Business Registration Number</p>
             <Input placeholder="Enter Business Registration Number" />
           </div>
-          <p>
-            That the said business operate at stand number{" "}
-            <Input placeholder="00000" className="inline-block w-20 mx-2" /> at
+          <div
+            style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}
+          >
+            <span>That the said person resides at stand number</span>
+            <Input placeholder="00500" className="w-20 mx-2" />
+            <span>at</span>
+            <Input placeholder="SUBURB NAME" className="w-40 mx-2" />
+            <span>in</span>
+            <Input placeholder="TOWN NAME" className="w-40 mx-2" />
+            <span>,</span>
+            <Input placeholder="REGION NAME" className="w-40 mx-2" />
+            <span>in</span>
+            <Input placeholder="MUNICIPAL NAME" className="w-40 mx-2" />
+            <span>under the jurisdiction of</span>
             <Input
-              placeholder="Suburb Name"
-              className="inline-block w-40 mx-2"
-            />{" "}
-            in
-            <Input placeholder="Town Name" className="inline-block w-40 mx-2" />
-            ,
-            <Input
-              placeholder="Region Name"
-              className="inline-block w-40 mx-2"
-            />{" "}
-            in
-            <Input
-              placeholder="Municipal Name"
-              className="inline-block w-40 mx-2"
-            />{" "}
-            under the jurisdiction of{" "}
-            <Input
-              placeholder="Enter Office of Authority"
-              className="inline-block w-40 mx-2"
+              placeholder="ENTER OFFICE OF AUTHORITY"
+              style={{ flex: 1, minWidth: '200px' }}
+              className="mx-2"
             />
-            .
-          </p>
+            <span>.</span>
+          </div>
+
           <p className="mt-4">
             We therefore recommend it for any undertaking that would in turn
             benefit it.
