@@ -43,12 +43,61 @@ const props = {
 const onChange = (e) => {
   console.log('Change:', e.target.value);
 };
+
 const onFinish = async (values) => {
   const formData = new FormData();
 
-  Object.keys(values).forEach((key) => {
-    if (values[key]) formData.append(key, values[key]);
-  });
+  formData.append(
+    'member',
+    JSON.stringify({
+      gender: values.memberGender,
+      disabilities: values.memberDisabilities,
+      firstName: values.memberFirstName,
+      secondName: values.memberSecondName,
+      surname: values.memberSurname,
+      idNumber: values.memberIDNumber,
+    })
+  );
+
+  formData.append(
+    'jointMember',
+    JSON.stringify({
+      gender: values.jointGender,
+      disabilities: values.jointDisabilities,
+      firstName: values.jointFirstName,
+      secondName: values.jointSecondName,
+      surname: values.jointSurname,
+      idNumber: values.jointIDNumber,
+    })
+  );
+
+  formData.append(
+    'beneficiary',
+    JSON.stringify({
+      gender: values.beneficiaryGender,
+      disabilities: values.beneficiaryDisabilities,
+      firstName: values.beneficiaryFirstName,
+      secondName: values.beneficiarySecondName,
+      surname: values.beneficiarySurname,
+      idNumber: values.beneficiaryIDNumber,
+    })
+  );
+
+  formData.append(
+    'landDetails',
+    JSON.stringify({
+      latLong: values.latLong,
+      wardNumber: values.wardNumber,
+      town: values.town,
+      suburb: values.suburb,
+      region: values.region,
+      municipal: values.municipal,
+      areaSize: values.areaSize,
+      vdNumber: values.vdNumber,
+    })
+  );
+
+  formData.append('endorsements', values.endorsements);
 
   const idCopies = document.querySelector('[name="idCopies"]').files[0];
   const authorityLetter = document.querySelector('[name="authorityLetter"]')
