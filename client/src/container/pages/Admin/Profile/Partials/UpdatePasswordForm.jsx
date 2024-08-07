@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button, Card, Typography } from 'antd';
-import { updatePassword } from '../../../../redux/auth/authSlice';
+import { updatePassword } from '../../../../../redux/auth/authSlice';
 
 const { Title, Text } = Typography;
 
 function UpdatePasswordForm() {
   const [form] = Form.useForm();
-  const loader = useSelector(state => state.auth.loader);
-  const errors = useSelector(state => state.auth.errors);
+  const loader = useSelector((state) => state.auth.loader);
+  const errors = useSelector((state) => state.auth.errors);
   const dispatch = useDispatch();
   const onFinish = (values) => {
     // console.log('Received values of form: ', values);
@@ -17,10 +17,12 @@ function UpdatePasswordForm() {
   };
 
   return (
-    <Card className='max-w-xl w-full shadow-lg'>
+    <Card className="max-w-xl w-full shadow-lg">
       <div className="my-4">
         <Title level={3}>Update Password</Title>
-        <Text type='secondary'>Ensure your account is using a long, random password to stay secure.</Text>
+        <Text type="secondary">
+          Ensure your account is using a long, random password to stay secure.
+        </Text>
       </div>
       <Form
         name="update_password"
@@ -69,7 +71,9 @@ function UpdatePasswordForm() {
                 if (!value || getFieldValue('newPassword') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
               },
             }),
           ]}
@@ -77,14 +81,19 @@ function UpdatePasswordForm() {
           <Input.Password size="large" placeholder="Confirm new Password" />
         </Form.Item>
         <Form.Item>
-          <Button loading={loader} type="primary" htmlType="submit" className="mt-2"
-            size="large">
+          <Button
+            loading={loader}
+            type="primary"
+            htmlType="submit"
+            className="mt-2"
+            size="large"
+          >
             Save
           </Button>
         </Form.Item>
       </Form>
     </Card>
-  )
+  );
 }
 
 export default UpdatePasswordForm;

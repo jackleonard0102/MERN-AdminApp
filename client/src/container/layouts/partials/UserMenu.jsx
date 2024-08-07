@@ -7,6 +7,7 @@ import {
   LockOutlined,
   UserOutlined,
   IdcardOutlined,
+  SettingOutlined,
   SafetyOutlined,
 } from '@ant-design/icons';
 
@@ -35,25 +36,21 @@ const UserMenu = () => {
 
   if (user.isAdmin) {
     items.unshift({
-      label: (
-        <div className="flex items-center">
-          <Avatar
-            size="large"
-            src={
-              user.logo
-                ? `${constants.SOCKET_URL}${
-                    user.logo
-                  }?reload=${new Date().getTime()}`
-                : '/imgs/logo.jpg'
-            }
-          />
-          <div className="ml-1">
-            {user.name}
-            <br />
-            {user.email}
-          </div>
-        </div>
-      ),
+      // label: (
+      //   <div className="flex items-center">
+      //     <Avatar
+      //       size="large"
+      //       src={
+      //         user.logo
+      //           ? `${constants.SOCKET_URL}${
+      //               user.logo
+      //             }?reload=${new Date().getTime()}`
+      //           : '/imgs/logo.jpg'
+      //       }
+      //     />
+      //     <div className="ml-1">{user.name}</div>
+      //   </div>
+      // ),
       key: 'user',
       type: 'group',
       children: [
@@ -63,17 +60,14 @@ const UserMenu = () => {
           icon: <IdcardOutlined />,
         },
         {
-          label: 'Admin',
-          key: 'admin',
-          type: 'group',
-          icon: <SafetyOutlined />,
-          children: [
-            {
-              label: 'Users',
-              key: '/admin/users',
-              icon: <UserOutlined />,
-            },
-          ],
+          label: 'Users',
+          key: '/admin/users',
+          icon: <UserOutlined />,
+        },
+        {
+          label: 'Settings',
+          key: '/admin/settings',
+          icon: <SettingOutlined />,
         },
       ],
     });
@@ -97,10 +91,13 @@ const UserMenu = () => {
       placement="bottomLeft"
       arrow
     >
-      <Avatar
-        src={`http://localhost:5000/upload/logo.png?reload=${new Date().getTime()}`}
-        className="shadow-lg cursor-pointer"
-      />
+      <div className="flex items-center">
+        <Avatar
+          size="large"
+          src={`http://localhost:5000/upload/logo.png?reload=${new Date().getTime()}`}
+        />
+        <div className="ml-1">{user.name}</div>
+      </div>
     </Dropdown>
   );
 };

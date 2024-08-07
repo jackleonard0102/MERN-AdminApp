@@ -12,9 +12,9 @@ import {
 import ImgCrop from 'antd-img-crop';
 import { useSelector, useDispatch } from 'react-redux';
 
-import constants from '../../../../config/constants';
-import { getStorage } from '../../../../helpers';
-import { getUser, updateProfile } from '../../../../redux/auth/authSlice';
+import constants from '../../../../../config/constants';
+import { getStorage } from '../../../../../helpers';
+import { getUser, updateProfile } from '../../../../../redux/auth/authSlice';
 
 const { Title, Text } = Typography;
 
