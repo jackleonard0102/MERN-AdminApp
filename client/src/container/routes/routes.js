@@ -49,7 +49,7 @@ const routes = [
   },
   {
     path: 'admin/settings',
-    component: lazy(() => import('../pages/Admin/Settings')),
+    component: lazy(() => import('../pages/Admin/Settings/Settings')),
     exact: true,
     isAdmin: true,
   },
