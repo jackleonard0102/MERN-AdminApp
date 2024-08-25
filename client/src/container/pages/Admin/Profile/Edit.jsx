@@ -1,11 +1,9 @@
 import React from 'react'
-import { Col, Row, Typography } from 'antd';
+import { Col, Row } from 'antd';
 
 import UpdateProfileForm from './Partials/UpdateProfileForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import DeleteAccountForm from './Partials/DeleteAccountForm';
-
-const { Title, Text } = Typography;
 
 function Edit() {
   return (
