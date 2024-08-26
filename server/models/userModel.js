@@ -1,3 +1,5 @@
+// models/userModel.js
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -19,9 +21,6 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    logo: {
-      type: String,
-    },
     permission: {
       type: Number,
       default: 2, // 1 for admin, 2 for regular user
@@ -42,15 +41,13 @@ const UserSchema = new Schema(
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
-  const user = this;
   const hash = await bcrypt.hash(this.password, 10);
   this.password = hash;
   next();
 });
 
 UserSchema.methods.isValidPassword = async function (password) {
-  const user = this;
-  const compare = await bcrypt.compare(password, user.password);
+  const compare = await bcrypt.compare(password, this.password);
   return compare;
 };
 

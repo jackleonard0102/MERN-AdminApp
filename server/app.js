@@ -1,4 +1,5 @@
 // app.js
+
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -37,12 +38,9 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); // Serve static files
 
 app.use("/api", api);
-
-app.use('/upload', express.static(path.join(__dirname, 'public/upload')));
-app.use('/uploads', express.static('uploads'));
 
 app.get("/*", function (req, res) {
   res.sendFile(path.resolve(__dirname, "public/index.html"));
