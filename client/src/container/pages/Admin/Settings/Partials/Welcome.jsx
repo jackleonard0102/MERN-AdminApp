@@ -43,9 +43,10 @@ function WelcomePageDetail() {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(user.logo);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
   useEffect(() => {
-    // Load settings data if necessary
+    // Fetch and set settings data if needed
     // For example:
     // dispatch(getSettings());
   }, [dispatch]);
@@ -78,7 +79,6 @@ function WelcomePageDetail() {
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
     // Update logo and settings
-    dispatch(updateProfile({ ...values, logo: imageUrl }));
     updateSettings(values);
   };
 
@@ -89,7 +89,7 @@ function WelcomePageDetail() {
     }
     if (info.file.status === 'done') {
       setImageUrl(info.file.response?.path);
-      info.file.thumbUrl = `${constants.SOCKET_URL}${info.file.response?.path}`;
+      setUploadedImageUrl(`${constants.SOCKET_URL}${info.file.response?.path}`);
       setLoading(false);
       dispatch(getUser());
       setRefresh((prev) => prev + 1);
@@ -108,7 +108,6 @@ function WelcomePageDetail() {
         name="settings"
         form={form}
         initialValues={{
-          logo: imageUrl,
           siteCode: user.siteCode || '',
           appVersion: user.appVersion || '',
         }}
@@ -120,7 +119,7 @@ function WelcomePageDetail() {
           <ImgCrop rotationSlider>
             <Upload
               name="file"
-              listType="picture-circle"
+              listType="picture-card"
               className="logo-uploader"
               multiple={false}
               showUploadList={false}
@@ -141,10 +140,8 @@ function WelcomePageDetail() {
                 <div className="relative">
                   <img
                     src={
-                      imageUrl
-                        ? `${
-                            constants.SOCKET_URL
-                          }${imageUrl}?reload=${new Date().getTime()}`
+                      uploadedImageUrl || imageUrl
+                        ? `${constants.SOCKET_URL}${uploadedImageUrl || imageUrl}?reload=${new Date().getTime()}`
                         : '/imgs/logo.jpg'
                     }
                     alt="logo"

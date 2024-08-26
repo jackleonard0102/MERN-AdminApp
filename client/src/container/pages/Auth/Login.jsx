@@ -46,7 +46,7 @@ function Login() {
       <Card className="w-[400px] shadow-lg">
         <div className="flex justify-center items-center text-center my-1">
           <Image
-            className="mb-5 rounded-full"
+            className="mb-5"
             width={100}
             src={`http://localhost:5000/upload/logo.png?${refreshKey}`} // Append refreshKey as query parameter
             preview={false}
