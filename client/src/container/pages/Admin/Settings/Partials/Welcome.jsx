@@ -28,7 +28,7 @@ const beforeUpload = (file) => {
   }
   const isLt2M = file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
+    message.error('Image must be smaller than 2MB!');
   }
   return isJpgOrPng && isLt2M;
 };
@@ -44,9 +44,42 @@ function WelcomePageDetail() {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(user.logo);
 
+  useEffect(() => {
+    // Load settings data if necessary
+    // For example:
+    // dispatch(getSettings());
+  }, [dispatch]);
+
+  const updateSettings = async (values) => {
+    try {
+      const response = await fetch(`${constants.HOST_URL}settings/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: getStorage('token'),
+        },
+        body: JSON.stringify({
+          siteCode: values.siteCode,
+          appVersion: values.appVersion,
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        message.success('Settings updated successfully');
+      } else {
+        message.error('Failed to update settings');
+      }
+    } catch (error) {
+      message.error('Error updating settings');
+      console.error(error);
+    }
+  };
+
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
+    // Update logo and settings
     dispatch(updateProfile({ ...values, logo: imageUrl }));
+    updateSettings(values);
   };
 
   const handleChange = (info) => {
@@ -68,15 +101,16 @@ function WelcomePageDetail() {
       <div className="my-4">
         <Title level={3}>Welcome Page Information</Title>
         <Text type="secondary">
-          Update your welcome page's logo, site code, app version.
+          Update your welcome page's logo, site code, and app version.
         </Text>
       </div>
       <Form
-        name="register"
+        name="settings"
         form={form}
         initialValues={{
-          name: user.name,
-          email: user.email,
+          logo: imageUrl,
+          siteCode: user.siteCode || '',
+          appVersion: user.appVersion || '',
         }}
         className="form"
         scrollToFirstError
@@ -90,7 +124,7 @@ function WelcomePageDetail() {
               className="logo-uploader"
               multiple={false}
               showUploadList={false}
-              action={`${constants.HOST_URL}users/upload`}
+              action={`${constants.HOST_URL}settings/upload-logo`}
               accept="image/*"
               headers={{
                 Authorization: getStorage('token'),
@@ -125,32 +159,26 @@ function WelcomePageDetail() {
           </ImgCrop>
         </Form.Item>
         <Form.Item
-          name="name"
+          name="siteCode"
           rules={[
             {
               required: true,
-              message: 'Please input your Name!',
+              message: 'Please input the Site Code!',
             },
           ]}
         >
-          <Input size="large" placeholder="Name" autoFocus />
+          <Input size="large" placeholder="Site Code" />
         </Form.Item>
         <Form.Item
-          name="email"
+          name="appVersion"
           rules={[
             {
-              type: 'email',
-              message: 'The input is not valid E-mail!',
-            },
-            {
               required: true,
-              message: 'Please input your E-mail!',
+              message: 'Please input the App Version!',
             },
           ]}
-          validateStatus={errors.email ? 'error' : ''}
-          help={errors.email}
         >
-          <Input size="large" placeholder="E-mail" />
+          <Input size="large" placeholder="App Version" />
         </Form.Item>
         <Form.Item>
           <Button
