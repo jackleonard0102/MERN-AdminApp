@@ -31,11 +31,14 @@ exports.uploadWelcomeLogo = async (req, res) => {
 // Get current settings
 exports.getSettings = async (req, res) => {
   try {
-    const setting = await Setting.findOne();
-    return res.status(200).json({ success: true, setting });
+    const settings = await Setting.findOne(); // Adjust the query as needed
+    if (!settings) {
+      return res.status(404).json({ message: 'Settings not found' });
+    }
+    res.status(200).json({ setting: settings });
   } catch (error) {
-    _error(error);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error('Error fetching settings:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

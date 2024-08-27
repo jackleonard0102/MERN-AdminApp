@@ -9,13 +9,15 @@ import {
   Card,
   Typography,
   Modal,
+  message
 } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '../../../redux/auth/authSlice';
 import GuestLayout from '../../layouts/GuestLayout';
 import { forgotPassword } from '../../../services/authAPI';
+import axios from 'axios';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 function Login() {
   const dispatch = useDispatch();
@@ -29,26 +31,51 @@ function Login() {
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [settings, setSettings] = useState({ siteCode: '', appVersion: '' });
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/settings')
+      .then((response) => {
+        console.log("this is respond from settings", response.data); // For debugging
+        if (response.data && response.data.setting) {
+          setSettings(response.data.setting);
+        } else {
+          // If the response structure is different, handle accordingly
+          setSettings({ siteCode: 'N/A', appVersion: 'N/A' });
+        }
+      })
+      .catch((error) => {
+        message.error('Failed to load settings'); // Use message.error correctly
+        console.error(error);
+      });
+  }, []);
+  
 
   const onFinish = (values) => {
     dispatch(login(values));
   };
 
-  const [refreshKey, setRefreshKey] = useState(0); // Initialize with 0 or any value
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // Function to update the key and force refresh
   const refreshImage = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
 
   return (
     <GuestLayout>
+      <div className="absolute top-20 right-4">
+        <Text>
+          Site Code: {settings.siteCode || 'N/A'} <br />
+          App Version: {settings.appVersion || 'N/A'}
+        </Text>
+      </div>
       <Card className="w-[400px] shadow-lg">
+        
         <div className="flex justify-center items-center text-center my-1">
           <Image
             className="mb-5"
             width={100}
-            src={`http://localhost:5000/upload/logo.png?${refreshKey}`} // Append refreshKey as query parameter
+            src={`http://localhost:5000/upload/logo.png?${refreshKey}`}
             preview={false}
           />
         </div>
@@ -106,15 +133,6 @@ function Login() {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
-              {/* <Button
-                type="link"
-                onClick={() => {
-                  form.setFieldValue('email', emailRef.current.input.value);
-                  setShowForgotModal(true);
-                }}
-              >
-                <span className="underline">Forgot password</span>
-              </Button> */}
             </div>
           </Form.Item>
 
@@ -174,7 +192,6 @@ function Login() {
         <Form form={form} layout="vertical">
           <Form.Item
             name="email"
-            // label="Email"
             rules={[
               {
                 required: true,
