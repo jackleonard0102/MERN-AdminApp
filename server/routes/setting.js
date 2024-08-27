@@ -11,6 +11,6 @@ router.post("/upload-logo", upload, settingController.uploadWelcomeLogo);
 
 // Route to update site code and app version
 router.put("/update", settingController.updateSettings);
-router.get('/', settingController.getSettings);
+router.get('/', settingController.getSettings); // This is now publicly accessible
 
 module.exports = router;

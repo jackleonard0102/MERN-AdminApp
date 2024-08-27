@@ -34,9 +34,9 @@ function Login() {
   const [settings, setSettings] = useState({ siteCode: '', appVersion: '' });
 
   useEffect(() => {
-    axios.get('http://localhost:5000/settings')
+    axios.get('http://localhost:5000/api/settings')
       .then((response) => {
-        console.log("this is respond from settings", response.data); // For debugging
+        console.log("Response from settings", response.data); // For debugging
         if (response.data && response.data.setting) {
           setSettings(response.data.setting);
         } else {
@@ -45,11 +45,10 @@ function Login() {
         }
       })
       .catch((error) => {
-        message.error('Failed to load settings'); // Use message.error correctly
+        message.error('Failed to load settings');
         console.error(error);
       });
   }, []);
-  
 
   const onFinish = (values) => {
     dispatch(login(values));
@@ -70,14 +69,13 @@ function Login() {
         </Text>
       </div>
       <Card className="w-[400px] shadow-lg">
-        
         <div className="flex justify-center items-center text-center my-1">
-          <Image
-            className="mb-5"
-            width={100}
-            src={`http://localhost:5000/upload/logo.png?${refreshKey}`}
-            preview={false}
-          />
+        <Image
+          className="mb-5"
+          width={100}
+          src={`http://localhost:5000/upload/logo.png?${refreshKey}`}
+          preview={false}
+        />
         </div>
         <div className="flex justify-center items-center text-center my-1">
           <Title level={3}>Log In</Title>

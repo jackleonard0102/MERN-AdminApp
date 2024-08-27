@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRouter);
 router.use('/users', jwtAuth, userRouter);
-router.use('/settings', jwtAuth, settingRouter);  // New settings route added
+router.use('/settings', settingRouter);  // New settings route added
 router.use('/personal-entry', personalEntryRoutes);
 
 module.exports = router;

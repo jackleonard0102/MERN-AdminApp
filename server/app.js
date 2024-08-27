@@ -40,7 +40,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files
 
-app.use("/api", api);
+app.use("/api", api); // All API routes will have '/api' prefix
 
 app.get("/*", function (req, res) {
   res.sendFile(path.resolve(__dirname, "public/index.html"));
