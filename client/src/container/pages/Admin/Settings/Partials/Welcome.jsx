@@ -83,18 +83,29 @@ function WelcomePageDetail() {
   };
 
   const handleChange = (info) => {
+    console.log('Upload Status:', info.file.status); // Log upload status
+    console.log('Response:', info.file.response); // Log the response from the server
+    
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
+    
     if (info.file.status === 'done') {
-      setImageUrl(info.file.response?.path);
-      setUploadedImageUrl(`${constants.SOCKET_URL}${info.file.response?.path}`);
+      const newImageUrl = `${constants.SOCKET_URL}${info.file.response?.path}`;
+      console.log('New Image URL:', newImageUrl); // Log new image URL
+      
+      setImageUrl(newImageUrl);
+      setUploadedImageUrl(newImageUrl);
       setLoading(false);
       dispatch(getUser());
       setRefresh((prev) => prev + 1);
+    } else if (info.file.status === 'error') {
+      message.error('Upload failed.');
+      setLoading(false);
     }
   };
+  
 
   return (
     <Card className="max-w-xl w-full shadow-lg">
@@ -141,13 +152,13 @@ function WelcomePageDetail() {
                   <img
                     src={
                       uploadedImageUrl || imageUrl
-                        ? `${constants.SOCKET_URL}${uploadedImageUrl || imageUrl}?reload=${new Date().getTime()}`
+                        ? `${uploadedImageUrl || imageUrl}?t=${new Date().getTime()}`
                         : '/imgs/logo.jpg'
                     }
                     alt="logo"
-                    className="w-full rounded-full"
+                    className="w-full"
                   />
-                  <div className="rounded-full absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
+                  <div className="absolute top-0 left-0 w-full h-full hover:bg-[#000a] opacity-0 hover:opacity-100 flex items-center justify-center text-white">
                     Change
                   </div>
                 </div>
