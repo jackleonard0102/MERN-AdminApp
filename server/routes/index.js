@@ -7,7 +7,7 @@ const router = express.Router();
 
 const authRouter = require('./auth');
 const userRouter = require('./user');
-const settingRouter = require('./setting');  // New line added for settings route
+const settingsRouter = require('./settings');  // New line added for settings route
 const personalEntryRoutes = require("./personalEntryRoutes")
 
 const authMiddleware = require('../middlewares/auth');
@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRouter);
 router.use('/users', jwtAuth, userRouter);
-router.use('/settings', settingRouter);  // New settings route added
+router.use('/settings', settingsRouter);  // New settings route added
 router.use('/personal-entry', personalEntryRoutes);
 
 module.exports = router;

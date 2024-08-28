@@ -13,7 +13,7 @@ const config = require("./config");
 const socketIO = require("./socket");
 const api = require("./routes");
 const UserModel = require("./models/userModel");
-const SettingModel = require("./models/settingModel");
+const WelcomeModel = require("./models/settings/welcome");
 const { _log, _error } = require("./utils/logging");
 const seedAdmin = require("./models/seedAdmin");
 
