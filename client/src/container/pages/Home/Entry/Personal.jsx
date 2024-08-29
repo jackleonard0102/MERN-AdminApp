@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import {
   Col,
@@ -14,6 +12,7 @@ import {
   Select,
   Upload,
   Collapse,
+  Modal,
 } from 'antd';
 
 const { Content } = Layout;
@@ -22,7 +21,7 @@ const { Title } = Typography;
 const { Option } = Select;
 const { Panel } = Collapse;
 
-const props = {
+const uploadProps = {
   name: 'file',
   action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
   headers: {
@@ -100,8 +99,7 @@ const onFinish = async (values) => {
   formData.append('endorsements', values.endorsements);
 
   const idCopies = document.querySelector('[name="idCopies"]').files[0];
-  const authorityLetter = document.querySelector('[name="authorityLetter"]')
-    .files[0];
+  const authorityLetter = document.querySelector('[name="authorityLetter"]').files[0];
 
   if (idCopies) formData.append('idCopies', idCopies);
   if (authorityLetter) formData.append('authorityLetter', authorityLetter);
@@ -124,9 +122,32 @@ const onFinishFailed = (errorInfo) => {
 };
 
 function PersonalEntry() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const [isJointModalVisible, setJointModalVisible] = useState(false);
+  const [isBeneficiaryModalVisible, setBeneficiaryModalVisible] = useState(false);
+
+  const showJointModal = () => {
+    setJointModalVisible(true);
+  };
+
+  const handleJointModalOk = () => {
+    setJointModalVisible(false);
+  };
+
+  const handleJointModalCancel = () => {
+    setJointModalVisible(false);
+  };
+
+  const showBeneficiaryModal = () => {
+    setBeneficiaryModalVisible(true);
+  };
+
+  const handleBeneficiaryModalOk = () => {
+    setBeneficiaryModalVisible(false);
+  };
+
+  const handleBeneficiaryModalCancel = () => {
+    setBeneficiaryModalVisible(false);
+  };
 
   return (
     <>
@@ -137,16 +158,17 @@ function PersonalEntry() {
 
         <Collapse defaultActiveKey={['1']}>
           <Panel header="Member" className="text-start" key="1">
+            {/* Member Form */}
             <Form
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Row gutter={(24, 24)}>
+              <Row gutter={24}>
                 <Col span={12}>
                   <Form.Item
-                    name="Gender"
+                    name="memberGender"
                     label="Gender"
                     rules={[
                       { required: true, message: 'Please select Gender' },
@@ -160,7 +182,7 @@ function PersonalEntry() {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="Disabilities"
+                    name="memberDisabilities"
                     label="Disabilities"
                     rules={[
                       { required: true, message: 'Please select Disabilities' },
@@ -175,7 +197,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="First Name"
-                    name="FirstName"
+                    name="memberFirstName"
                     rules={[
                       {
                         required: true,
@@ -189,7 +211,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Second Name"
-                    name="SecondName"
+                    name="memberSecondName"
                     rules={[
                       {
                         required: true,
@@ -203,7 +225,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Surname"
-                    name="Surname"
+                    name="memberSurname"
                     rules={[
                       {
                         required: true,
@@ -217,7 +239,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="ID Number"
-                    name="ID_Number"
+                    name="memberIDNumber"
                     rules={[
                       {
                         required: true,
@@ -232,210 +254,73 @@ function PersonalEntry() {
             </Form>
           </Panel>
 
-          <Panel header="Joint Member" className="text-start" key="2">
+          <Panel
+            header="Joint Member"
+            className="text-start"
+            key="2"
+            extra={
+              <Button
+                type="primary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  showJointModal();
+                }}
+              >
+                Add Joint Member
+              </Button>
+            }
+          >
+            {/* Joint Member Form */}
             <Form
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Row gutter={(24, 24)}>
-                <Col span={12}>
-                  <Form.Item
-                    name="Gender"
-                    label="Gender"
-                    rules={[
-                      { required: true, message: 'Please select Gender' },
-                    ]}
-                  >
-                    <Select placeholder="Select Gender">
-                      <Option value="Male">Male</Option>
-                      <Option value="Female">Female</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="Disabilities"
-                    label="Disabilities"
-                    rules={[
-                      { required: true, message: 'Please select Disabilities' },
-                    ]}
-                  >
-                    <Select placeholder="Select Disabilities">
-                      <Option value="Yes">Yes</Option>
-                      <Option value="No">No</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="First Name"
-                    name="FirstName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your firstname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Second Name"
-                    name="SecondName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your secondname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Surname"
-                    name="Surname"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your surname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="ID Number"
-                    name="ID_Number"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your ID number!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-              </Row>
+              {/* Form content here */}
             </Form>
           </Panel>
 
-          <Panel header="Beneficiary" className="text-start" key="3">
+          <Panel
+            header="Beneficiary"
+            className="text-start"
+            key="3"
+            extra={
+              <Button
+                type="primary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  showBeneficiaryModal();
+                }}
+              >
+                Add Beneficiary
+              </Button>
+            }
+          >
+            {/* Beneficiary Form */}
             <Form
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Row gutter={(24, 24)}>
-                <Col span={12}>
-                  <Form.Item
-                    name="Gender"
-                    label="Gender"
-                    rules={[
-                      { required: true, message: 'Please select Gender' },
-                    ]}
-                  >
-                    <Select placeholder="Select Gender">
-                      <Option value="Male">Male</Option>
-                      <Option value="Female">Female</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="Disabilities"
-                    label="Disabilities"
-                    rules={[
-                      { required: true, message: 'Please select Disabilities' },
-                    ]}
-                  >
-                    <Select placeholder="Select Disabilities">
-                      <Option value="Yes">Yes</Option>
-                      <Option value="No">No</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="First Name"
-                    name="FirstName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your firstname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Second Name"
-                    name="SecondName"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your secondname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Surname"
-                    name="Surname"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your surname!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="ID Number"
-                    name="ID_Number"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your ID number!',
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-              </Row>
+              {/* Form content here */}
             </Form>
           </Panel>
 
           <Panel header="Land Details" className="text-start" key="4">
+            {/* Land Details Form */}
             <Form
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Row gutter={(24, 24)}>
+              <Row gutter={24}>
                 <Col span={12}>
                   <Form.Item
                     label="Latitude, Longitude"
-                    name="LatLong"
+                    name="latLong"
                     rules={[
                       {
                         required: true,
@@ -449,7 +334,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Ward Number"
-                    name="WardNumber"
+                    name="wardNumber"
                     rules={[
                       {
                         required: true,
@@ -463,7 +348,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Town"
-                    name="Town"
+                    name="town"
                     rules={[
                       {
                         required: true,
@@ -477,7 +362,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Suburb"
-                    name="Suburb"
+                    name="suburb"
                     rules={[
                       {
                         required: true,
@@ -491,7 +376,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Region"
-                    name="Region"
+                    name="region"
                     rules={[
                       {
                         required: true,
@@ -505,7 +390,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Municipal"
-                    name="Municipal"
+                    name="municipal"
                     rules={[
                       {
                         required: true,
@@ -519,11 +404,11 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="Area Size"
-                    name="AreaSize"
+                    name="areaSize"
                     rules={[
                       {
                         required: true,
-                        message: 'Please input your area size!',
+                        message: 'Please input your Area Size!',
                       },
                     ]}
                   >
@@ -533,7 +418,7 @@ function PersonalEntry() {
                 <Col span={12}>
                   <Form.Item
                     label="VD Number"
-                    name="VD_Number"
+                    name="vdNumber"
                     rules={[
                       {
                         required: true,
@@ -549,48 +434,50 @@ function PersonalEntry() {
           </Panel>
 
           <Panel header="Endorsements" className="text-start" key="5">
+            {/* Endorsements Form */}
             <Form
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-              <Row gutter={24}>
+              <Row>
                 <Col span={24}>
-                  <TextArea
-                    showCount
-                    maxLength={1000}
-                    onChange={onChange}
-                    placeholder="Note ..."
-                    style={{
-                      height: 120,
-                      resize: 'none',
-                    }}
-                  />
+                  <Form.Item
+                    label="Endorsements"
+                    name="endorsements"
+                    labelCol={{ span: 4 }}
+                    wrapperCol={{ span: 20 }}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your Endorsements!',
+                      },
+                    ]}
+                  >
+                    <TextArea rows={4} onChange={onChange} />
+                  </Form.Item>
                 </Col>
               </Row>
             </Form>
           </Panel>
         </Collapse>
 
-        <Form
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-        >
+        <Form>
           <Row className="mt-5 mb-8" gutter={24}>
             <Col span={12}>
-              <Upload {...props}>
-                <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
-              </Upload>
+              <Form.Item name="idCopies">
+                <Upload {...uploadProps}>
+                  <Button icon={<UploadOutlined />}>ID Copies Upload</Button>
+                </Upload>
+              </Form.Item>
             </Col>
             <Col span={12}>
-              <Upload {...props}>
-                <Button icon={<UploadOutlined />}>Authority Letter</Button>
-              </Upload>
+              <Form.Item name="authorityLetter">
+                <Upload {...uploadProps}>
+                  <Button icon={<UploadOutlined />}>Authority Letter</Button>
+                </Upload>
+              </Form.Item>
             </Col>
           </Row>
         </Form>
@@ -603,6 +490,188 @@ function PersonalEntry() {
             Clear
           </Button>
         </div>
+
+        <Modal
+          title="Add Joint Member"
+          visible={isJointModalVisible}
+          onOk={handleJointModalOk}
+          onCancel={handleJointModalCancel}
+          footer={null}
+        >
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              name="jointGender"
+              label="Gender"
+              rules={[
+                { required: true, message: 'Please select Gender' },
+              ]}
+            >
+              <Select placeholder="Select Gender">
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="jointDisabilities"
+              label="Disabilities"
+              rules={[
+                { required: true, message: 'Please select Disabilities' },
+              ]}
+            >
+              <Select placeholder="Select Disabilities">
+                <Option value="Yes">Yes</Option>
+                <Option value="No">No</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="First Name"
+              name="jointFirstName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your firstname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Second Name"
+              name="jointSecondName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your secondname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Surname"
+              name="jointSurname"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your surname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="ID Number"
+              name="jointIDNumber"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your ID number!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Add
+            </Button>
+          </Form>
+        </Modal>
+
+        <Modal
+          title="Add Beneficiary"
+          visible={isBeneficiaryModalVisible}
+          onOk={handleBeneficiaryModalOk}
+          onCancel={handleBeneficiaryModalCancel}
+          footer={null}
+        >
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              name="beneficiaryGender"
+              label="Gender"
+              rules={[
+                { required: true, message: 'Please select Gender' },
+              ]}
+            >
+              <Select placeholder="Select Gender">
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="beneficiaryDisabilities"
+              label="Disabilities"
+              rules={[
+                { required: true, message: 'Please select Disabilities' },
+              ]}
+            >
+              <Select placeholder="Select Disabilities">
+                <Option value="Yes">Yes</Option>
+                <Option value="No">No</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="First Name"
+              name="beneficiaryFirstName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your firstname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Second Name"
+              name="beneficiarySecondName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your secondname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Surname"
+              name="beneficiarySurname"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your surname!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="ID Number"
+              name="beneficiaryIDNumber"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your ID number!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Add
+            </Button>
+          </Form>
+        </Modal>
       </Content>
     </>
   );
