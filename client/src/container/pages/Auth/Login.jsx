@@ -37,8 +37,8 @@ function Login() {
     axios.get('http://localhost:5000/api/settings')
       .then((response) => {
         console.log("Response from settings", response.data); // For debugging
-        if (response.data && response.data.setting) {
-          setSettings(response.data.setting);
+        if (response.data && response.data.welcome) {
+          setSettings(response.data.welcome);
         } else {
           // If the response structure is different, handle accordingly
           setSettings({ siteCode: 'N/A', appVersion: 'N/A' });
